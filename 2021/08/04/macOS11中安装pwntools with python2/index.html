@@ -1,0 +1,715 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>macOS11中安装pwntools with python2 | Loki's Blog</title><meta name="keywords" content="Python,PWN"><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言在macOS Big Sur中通过pip3安装pwntools没有遇到什么问题, 但是通过pip2安装pwntools却遇到了错误: 编译安装unicorn时失败. 于是在这里记录一下解决方案 解决环境macOS 11.5.1 amd64 Python 2.7.16 pip 20.3.4 pip安装pip安装时, 出现了这样的错误 ❯ pip2 install pwn DEPRECATION:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="macOS11中安装pwntools with python2">
+<meta property="og:url" content="http://example.com/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/index.html">
+<meta property="og:site_name" content="Loki&#39;s Blog">
+<meta property="og:description" content="前言在macOS Big Sur中通过pip3安装pwntools没有遇到什么问题, 但是通过pip2安装pwntools却遇到了错误: 编译安装unicorn时失败. 于是在这里记录一下解决方案 解决环境macOS 11.5.1 amd64 Python 2.7.16 pip 20.3.4 pip安装pip安装时, 出现了这样的错误 ❯ pip2 install pwn DEPRECATION:">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
+<meta property="article:published_time" content="2021-08-03T19:25:32.000Z">
+<meta property="article:modified_time" content="2021-08-04T07:25:55.258Z">
+<meta property="article:author" content="Loki">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="PWN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/logo.png"><link rel="canonical" href="http://example.com/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容：${query}"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isanchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'macOS11中安装pwntools with python2',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2021-08-04 15:25:55'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Loki's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">macOS11中安装pwntools with python2</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2021-08-03T19:25:32.000Z" title="发表于 2021-08-04 03:25:32">2021-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2021-08-04T07:25:55.258Z" title="更新于 2021-08-04 15:25:55">2021-08-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">6.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>38分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="macOS11中安装pwntools with python2"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在macOS Big Sur中通过pip3安装pwntools没有遇到什么问题, 但是通过pip2安装pwntools却遇到了错误: 编译安装unicorn时失败. 于是在这里记录一下解决方案</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>macOS 11.5.1 amd64</p>
+<p>Python 2.7.16</p>
+<p>pip 20.3.4</p>
+<h3 id="pip安装"><a href="#pip安装" class="headerlink" title="pip安装"></a>pip安装</h3><p>pip安装时, 出现了这样的错误</p>
+<pre class="line-numbers language-none"><code class="language-none">❯ pip2 install pwn
+DEPRECATION: Python 2.7 reached the end of its life on January 1st, 2020. Please upgrade your Python as Python 2.7 is no longer maintained. pip 21.0 will drop support for Python 2.7 in January 2021. More details about Python 2 support in pip can be found at https:&#x2F;&#x2F;pip.pypa.io&#x2F;en&#x2F;latest&#x2F;development&#x2F;release-process&#x2F;#python-2-support pip 21.0 will remove support for this functionality.
+Defaulting to user installation because normal site-packages is not writeable
+Collecting pwn
+  Using cached pwn-1.0.tar.gz (1.1 kB)
+Collecting pwntools
+  Using cached pwntools-4.6.0-py2.py3-none-any.whl (10.0 MB)
+Requirement already satisfied: capstone&gt;&#x3D;3.0.5rc2 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (4.0.2)
+Requirement already satisfied: colored-traceback in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (0.3.0)
+Requirement already satisfied: ropgadget&gt;&#x3D;5.3 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (6.5)
+Requirement already satisfied: psutil&gt;&#x3D;3.3.0 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (5.8.0)
+Requirement already satisfied: intervaltree&gt;&#x3D;3.0 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (3.1.0)
+Requirement already satisfied: packaging in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (20.9)
+Requirement already satisfied: sortedcontainers in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (2.3.0)
+Requirement already satisfied: pyelftools&gt;&#x3D;0.2.4 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (0.27)
+Requirement already satisfied: mako&gt;&#x3D;1.0.0 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (1.1.4)
+Requirement already satisfied: pyserial&gt;&#x3D;2.7 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (3.5)
+Requirement already satisfied: pygments&gt;&#x3D;2.0 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (2.5.2)
+Requirement already satisfied: pysocks in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (1.7.1)
+Collecting unicorn&lt;1.0.2rc4,&gt;&#x3D;1.0.2rc1
+  Downloading unicorn-1.0.2rc3.tar.gz (1.6 MB)
+     |████████████████████████████████| 1.6 MB 905 kB&#x2F;s
+Collecting paramiko&gt;&#x3D;1.15.2
+  Downloading paramiko-2.7.2-py2.py3-none-any.whl (206 kB)
+     |████████████████████████████████| 206 kB 971 kB&#x2F;s
+Requirement already satisfied: pip&gt;&#x3D;6.0.8 in &#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;site-packages (from pwntools-&gt;pwn) (20.3.4)
+Requirement already satisfied: six&gt;&#x3D;1.12.0 in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from pwntools-&gt;pwn) (1.12.0)
+Requirement already satisfied: python-dateutil in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from pwntools-&gt;pwn) (1.5)
+Requirement already satisfied: requests&gt;&#x3D;2.0 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (2.23.0)
+Requirement already satisfied: rpyc in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from pwntools-&gt;pwn) (4.1.5)
+Requirement already satisfied: pyparsing&gt;&#x3D;2.0.2 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from packaging-&gt;pwntools-&gt;pwn) (2.4.7)
+Requirement already satisfied: MarkupSafe&gt;&#x3D;0.9.2 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from mako&gt;&#x3D;1.0.0-&gt;pwntools-&gt;pwn) (1.1.1)
+Requirement already satisfied: cryptography&gt;&#x3D;2.5 in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from paramiko&gt;&#x3D;1.15.2-&gt;pwntools-&gt;pwn) (2.9.2)
+Collecting pynacl&gt;&#x3D;1.0.1
+  Downloading PyNaCl-1.4.0-cp27-cp27m-macosx_10_10_x86_64.whl (379 kB)
+     |████████████████████████████████| 379 kB 918 kB&#x2F;s
+Collecting bcrypt&gt;&#x3D;3.1.3
+  Downloading bcrypt-3.1.7-cp27-cp27m-macosx_10_6_intel.whl (53 kB)
+     |████████████████████████████████| 53 kB 1.1 MB&#x2F;s
+Requirement already satisfied: certifi&gt;&#x3D;2017.4.17 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from requests&gt;&#x3D;2.0-&gt;pwntools-&gt;pwn) (2020.12.5)
+Requirement already satisfied: urllib3!&#x3D;1.25.0,!&#x3D;1.25.1,&lt;1.26,&gt;&#x3D;1.21.1 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from requests&gt;&#x3D;2.0-&gt;pwntools-&gt;pwn) (1.25.8)
+Requirement already satisfied: idna&lt;3,&gt;&#x3D;2.5 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from requests&gt;&#x3D;2.0-&gt;pwntools-&gt;pwn) (2.10)
+Requirement already satisfied: chardet&lt;4,&gt;&#x3D;3.0.2 in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from requests&gt;&#x3D;2.0-&gt;pwntools-&gt;pwn) (3.0.4)
+Requirement already satisfied: plumbum in &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages (from rpyc-&gt;pwntools-&gt;pwn) (1.7.0)
+Requirement already satisfied: cffi!&#x3D;1.11.3,&gt;&#x3D;1.8 in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from cryptography&gt;&#x3D;2.5-&gt;paramiko&gt;&#x3D;1.15.2-&gt;pwntools-&gt;pwn) (1.14.3)
+Requirement already satisfied: enum34 in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from cryptography&gt;&#x3D;2.5-&gt;paramiko&gt;&#x3D;1.15.2-&gt;pwntools-&gt;pwn) (1.1.6)
+Requirement already satisfied: ipaddress in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from cryptography&gt;&#x3D;2.5-&gt;paramiko&gt;&#x3D;1.15.2-&gt;pwntools-&gt;pwn) (1.0.22)
+Requirement already satisfied: pycparser in &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python (from cffi!&#x3D;1.11.3,&gt;&#x3D;1.8-&gt;cryptography&gt;&#x3D;2.5-&gt;paramiko&gt;&#x3D;1.15.2-&gt;pwntools-&gt;pwn) (2.19)
+Building wheels for collected packages: pwn, unicorn
+  Building wheel for pwn (setup.py) ... done
+  Created wheel for pwn: filename&#x3D;pwn-1.0-py2-none-any.whl size&#x3D;1219 sha256&#x3D;c85d41546e84a524bc7a7da4778140308f156ef766147b195d9b9426fbccaa9a
+  Stored in directory: &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Caches&#x2F;pip&#x2F;wheels&#x2F;b5&#x2F;47&#x2F;e7&#x2F;37ed277a804c6b0bb20b4a2395ea8434eb937f368319d8d0ab
+  Building wheel for unicorn (setup.py) ... error
+  ERROR: Command errored out with exit status 1:
+   command: &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Resources&#x2F;Python.app&#x2F;Contents&#x2F;MacOS&#x2F;Python -u -c &#39;import sys, setuptools, tokenize; sys.argv[0] &#x3D; &#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;; __file__&#x3D;&#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;;f&#x3D;getattr(tokenize, &#39;&quot;&#39;&quot;&#39;open&#39;&quot;&#39;&quot;&#39;, open)(__file__);code&#x3D;f.read().replace(&#39;&quot;&#39;&quot;&#39;\r\n&#39;&quot;&#39;&quot;&#39;, &#39;&quot;&#39;&quot;&#39;\n&#39;&quot;&#39;&quot;&#39;);f.close();exec(compile(code, __file__, &#39;&quot;&#39;&quot;&#39;exec&#39;&quot;&#39;&quot;&#39;))&#39; bdist_wheel -d &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-wheel-8pFtsB
+       cwd: &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;
+  Complete output (399 lines):
+  &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python&#x2F;setuptools&#x2F;dist.py:472: UserWarning: Normalizing &#39;1.0.2.rc3&#39; to &#39;1.0.2rc3&#39;
+    normalized_version,
+  running bdist_wheel
+  running build
+  Building C extensions
+  cd qemu &amp;&amp; \
+  	.&#x2F;configure --cc&#x3D;&quot;cc&quot; --extra-cflags&#x3D;&quot;-DUNICORN_HAS_X86 -DUNICORN_HAS_ARM -DUNICORN_HAS_ARMEB -DUNICORN_HAS_M68K -DUNICORN_HAS_ARM64 -DUNICORN_HAS_ARM64EB -DUNICORN_HAS_MIPS -DUNICORN_HAS_MIPSEL -DUNICORN_HAS_MIPS64 -DUNICORN_HAS_MIPS64EL -DUNICORN_HAS_SPARC -fPIC -fvisibility&#x3D;hidden&quot; --target-list&#x3D;&quot;x86_64-softmmu, arm-softmmu, armeb-softmmu, m68k-softmmu, aarch64-softmmu, aarch64eb-softmmu, mips-softmmu, mipsel-softmmu, mips64-softmmu, mips64el-softmmu, sparc-softmmu,sparc64-softmmu,&quot; --python&#x3D;&#x2F;usr&#x2F;bin&#x2F;python
+  Source path       &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;src&#x2F;qemu
+  C compiler        cc
+  Host C compiler   cc
+  Objective-C compiler clang
+  ARFLAGS           rv
+  CFLAGS            -g
+  QEMU_CFLAGS       -m64 -DOS_OBJECT_USE_OBJC&#x3D;0 -arch x86_64 -D_GNU_SOURCE -D_FILE_OFFSET_BITS&#x3D;64 -D_LARGEFILE_SOURCE -Wstrict-prototypes -Wredundant-decls -Wall -Wundef -Wwrite-strings -Wmissing-prototypes -fno-strict-aliasing -fno-common -DUNICORN_HAS_X86 -DUNICORN_HAS_ARM -DUNICORN_HAS_ARMEB -DUNICORN_HAS_M68K -DUNICORN_HAS_ARM64 -DUNICORN_HAS_ARM64EB -DUNICORN_HAS_MIPS -DUNICORN_HAS_MIPSEL -DUNICORN_HAS_MIPS64 -DUNICORN_HAS_MIPS64EL -DUNICORN_HAS_SPARC -fPIC -fvisibility&#x3D;hidden  -Wno-string-plus-int -Wno-initializer-overrides -Wendif-labels -Wmissing-include-dirs -Wempty-body -Wnested-externs -Wformat-security -Wformat-y2k -Winit-self -Wignored-qualifiers -Wold-style-definition -Wtype-limits -fstack-protector-strong
+  LDFLAGS           -m64 -arch x86_64 -g -L&#x2F;usr&#x2F;local&#x2F;opt&#x2F;sqlite&#x2F;lib
+  make              make
+  python            &#x2F;usr&#x2F;bin&#x2F;python -B
+  host CPU          x86_64
+  host big endian   no
+  target list       x86_64-softmmu  arm-softmmu  armeb-softmmu  m68k-softmmu  aarch64-softmmu  aarch64eb-softmmu  mips-softmmu  mipsel-softmmu  mips64-softmmu  mips64el-softmmu  sparc-softmmu sparc64-softmmu
+  tcg debug enabled no
+  strip binaries    yes
+  static build      no
+  mingw32 support   no
+  PIE               no
+  printf &quot;x86 m68k arm aarch64 mips sparc&quot; &gt; config.log
+  &#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;make -C qemu -j4
+    GEN   x86_64-softmmu&#x2F;config-devices.mak
+    GEN   arm-softmmu&#x2F;config-devices.mak
+    GEN   armeb-softmmu&#x2F;config-devices.mak
+    GEN   m68k-softmmu&#x2F;config-devices.mak
+    GEN   aarch64-softmmu&#x2F;config-devices.mak
+    GEN   aarch64eb-softmmu&#x2F;config-devices.mak
+    GEN   mips-softmmu&#x2F;config-devices.mak
+    GEN   mipsel-softmmu&#x2F;config-devices.mak
+    GEN   mips64-softmmu&#x2F;config-devices.mak
+    GEN   mips64el-softmmu&#x2F;config-devices.mak
+    GEN   sparc-softmmu&#x2F;config-devices.mak
+    GEN   sparc64-softmmu&#x2F;config-devices.mak
+    GEN   config-host.h
+    GEN   qapi-types.h
+    GEN   qapi-visit.h
+    GEN   config-all-devices.mak
+    CC    ..&#x2F;uc.o
+    CC    ..&#x2F;list.o
+    CC    glib_compat.o
+    GEN   qapi-types.c
+    GEN   qapi-visit.c
+    CC    accel.o
+    CC    vl.o
+    CC    qemu-timer.o
+    CC    qemu-log.o
+    CC    tcg-runtime.o
+    CC    hw&#x2F;core&#x2F;qdev.o
+    CC    hw&#x2F;core&#x2F;machine.o
+    CC    qom&#x2F;object.o
+    CC    qom&#x2F;container.o
+    CC    qom&#x2F;qom-qobject.o
+    CC    qom&#x2F;cpu.o
+    CC    qapi-types.o
+    CC    qapi-visit.o
+    CC    qapi&#x2F;qapi-visit-core.o
+    CC    qapi&#x2F;qapi-dealloc-visitor.o
+    CC    qapi&#x2F;qmp-input-visitor.o
+    CC    qapi&#x2F;qmp-output-visitor.o
+    CC    qapi&#x2F;string-input-visitor.o
+    CC    qobject&#x2F;qint.o
+    CC    qobject&#x2F;qstring.o
+    CC    qobject&#x2F;qdict.o
+    CC    qobject&#x2F;qlist.o
+    CC    qobject&#x2F;qfloat.o
+    CC    qobject&#x2F;qbool.o
+    CC    qobject&#x2F;qerror.o
+    CC    util&#x2F;cutils.o
+    CC    util&#x2F;qemu-timer-common.o
+    CC    util&#x2F;oslib-posix.o
+    CC    util&#x2F;qemu-thread-posix.o
+    CC    util&#x2F;module.o
+    CC    util&#x2F;bitmap.o
+    CC    util&#x2F;bitops.o
+    CC    util&#x2F;error.o
+    CC    util&#x2F;aes.o
+    CC    util&#x2F;crc32c.o
+    CC    util&#x2F;host-utils.o
+    CC    util&#x2F;getauxval.o
+    GEN   arm-softmmu&#x2F;config-target.h
+    GEN   armeb-softmmu&#x2F;config-target.h
+    GEN   x86_64-softmmu&#x2F;config-target.h
+    GEN   m68k-softmmu&#x2F;config-target.h
+    CC    arm-softmmu&#x2F;exec.o
+    CC    m68k-softmmu&#x2F;exec.o
+    CC    x86_64-softmmu&#x2F;exec.o
+    CC    armeb-softmmu&#x2F;exec.o
+    CC    m68k-softmmu&#x2F;translate-all.o
+    CC    armeb-softmmu&#x2F;translate-all.o
+    CC    x86_64-softmmu&#x2F;translate-all.o
+    CC    arm-softmmu&#x2F;translate-all.o
+    CC    m68k-softmmu&#x2F;cpu-exec.o
+    CC    arm-softmmu&#x2F;cpu-exec.o
+    CC    x86_64-softmmu&#x2F;cpu-exec.o
+    CC    armeb-softmmu&#x2F;cpu-exec.o
+    CC    m68k-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    x86_64-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    armeb-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    arm-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    m68k-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    arm-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    armeb-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    x86_64-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    m68k-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    armeb-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    arm-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    x86_64-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    m68k-softmmu&#x2F;cpus.o
+    CC    m68k-softmmu&#x2F;ioport.o
+    CC    arm-softmmu&#x2F;cpus.o
+    CC    armeb-softmmu&#x2F;cpus.o
+    CC    x86_64-softmmu&#x2F;cpus.o
+    CC    m68k-softmmu&#x2F;memory.o
+    CC    arm-softmmu&#x2F;ioport.o
+    CC    armeb-softmmu&#x2F;ioport.o
+    CC    x86_64-softmmu&#x2F;ioport.o
+    CC    m68k-softmmu&#x2F;cputlb.o
+    CC    armeb-softmmu&#x2F;memory.o
+    CC    arm-softmmu&#x2F;memory.o
+    CC    x86_64-softmmu&#x2F;memory.o
+    CC    armeb-softmmu&#x2F;cputlb.o
+    CC    arm-softmmu&#x2F;cputlb.o
+    CC    x86_64-softmmu&#x2F;cputlb.o
+    CC    m68k-softmmu&#x2F;memory_mapping.o
+    CC    m68k-softmmu&#x2F;hw&#x2F;m68k&#x2F;dummy_m68k.o
+    CC    armeb-softmmu&#x2F;memory_mapping.o
+    CC    arm-softmmu&#x2F;memory_mapping.o
+    CC    x86_64-softmmu&#x2F;memory_mapping.o
+    CC    m68k-softmmu&#x2F;target-m68k&#x2F;translate.o
+    CC    armeb-softmmu&#x2F;hw&#x2F;arm&#x2F;tosa.o
+    CC    arm-softmmu&#x2F;hw&#x2F;arm&#x2F;tosa.o
+    CC    x86_64-softmmu&#x2F;hw&#x2F;intc&#x2F;apic.o
+    CC    armeb-softmmu&#x2F;hw&#x2F;arm&#x2F;virt.o
+    CC    arm-softmmu&#x2F;hw&#x2F;arm&#x2F;virt.o
+    CC    x86_64-softmmu&#x2F;hw&#x2F;intc&#x2F;apic_common.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;translate.o
+    CC    m68k-softmmu&#x2F;target-m68k&#x2F;op_helper.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;translate.o
+    CC    x86_64-softmmu&#x2F;hw&#x2F;i386&#x2F;pc.o
+    CC    m68k-softmmu&#x2F;target-m68k&#x2F;helper.o
+    CC    x86_64-softmmu&#x2F;hw&#x2F;i386&#x2F;pc_piix.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;translate.o
+    CC    m68k-softmmu&#x2F;target-m68k&#x2F;cpu.o
+    CC    m68k-softmmu&#x2F;target-m68k&#x2F;unicorn.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;op_helper.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;helper.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;op_helper.o
+    GEN   aarch64-softmmu&#x2F;config-target.h
+    CC    aarch64-softmmu&#x2F;exec.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;cpu.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;helper.o
+    CC    aarch64-softmmu&#x2F;translate-all.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;excp_helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;cpu.o
+    CC    aarch64-softmmu&#x2F;cpu-exec.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;fpu_helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;neon_helper.o
+    CC    aarch64-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;cpu.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;neon_helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;iwmmxt_helper.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;cc_helper.o
+    CC    aarch64-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;iwmmxt_helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;psci.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;int_helper.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;unicorn_arm.o
+    CC    aarch64-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;svm_helper.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;psci.o
+    CC    armeb-softmmu&#x2F;target-arm&#x2F;crypto_helper.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;unicorn_arm.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;smm_helper.o
+    CC    aarch64-softmmu&#x2F;cpus.o
+    CC    arm-softmmu&#x2F;target-arm&#x2F;crypto_helper.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;misc_helper.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;mem_helper.o
+    CC    aarch64-softmmu&#x2F;ioport.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;seg_helper.o
+    CC    aarch64-softmmu&#x2F;memory.o
+    GEN   aarch64eb-softmmu&#x2F;config-target.h
+    CC    aarch64eb-softmmu&#x2F;exec.o
+    GEN   mips-softmmu&#x2F;config-target.h
+    CC    mips-softmmu&#x2F;exec.o
+    CC    aarch64-softmmu&#x2F;cputlb.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;arch_memory_mapping.o
+    CC    aarch64eb-softmmu&#x2F;translate-all.o
+    CC    mips-softmmu&#x2F;translate-all.o
+    CC    x86_64-softmmu&#x2F;target-i386&#x2F;unicorn.o
+    CC    aarch64eb-softmmu&#x2F;cpu-exec.o
+    CC    aarch64-softmmu&#x2F;memory_mapping.o
+    CC    mips-softmmu&#x2F;cpu-exec.o
+    CC    aarch64eb-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    aarch64-softmmu&#x2F;hw&#x2F;arm&#x2F;tosa.o
+    GEN   mipsel-softmmu&#x2F;config-target.h
+    CC    mipsel-softmmu&#x2F;exec.o
+    CC    mips-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    aarch64-softmmu&#x2F;hw&#x2F;arm&#x2F;virt.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;translate.o
+    CC    mipsel-softmmu&#x2F;translate-all.o
+    CC    aarch64eb-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    mipsel-softmmu&#x2F;cpu-exec.o
+    CC    mips-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    mipsel-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    aarch64eb-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    mips-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    aarch64eb-softmmu&#x2F;cpus.o
+    CC    mipsel-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    aarch64eb-softmmu&#x2F;ioport.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;op_helper.o
+    CC    mips-softmmu&#x2F;cpus.o
+    CC    aarch64eb-softmmu&#x2F;memory.o
+    CC    mips-softmmu&#x2F;ioport.o
+    CC    mipsel-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;helper.o
+    CC    mips-softmmu&#x2F;memory.o
+    CC    aarch64eb-softmmu&#x2F;cputlb.o
+    CC    mips-softmmu&#x2F;cputlb.o
+    CC    mipsel-softmmu&#x2F;cpus.o
+    CC    aarch64eb-softmmu&#x2F;memory_mapping.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;cpu.o
+    CC    mipsel-softmmu&#x2F;ioport.o
+    CC    aarch64eb-softmmu&#x2F;hw&#x2F;arm&#x2F;tosa.o
+    CC    mips-softmmu&#x2F;memory_mapping.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;neon_helper.o
+    CC    mipsel-softmmu&#x2F;memory.o
+    CC    aarch64eb-softmmu&#x2F;hw&#x2F;arm&#x2F;virt.o
+    CC    mips-softmmu&#x2F;hw&#x2F;mips&#x2F;mips_r4k.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;translate.o
+    CC    mipsel-softmmu&#x2F;cputlb.o
+    CC    mips-softmmu&#x2F;hw&#x2F;mips&#x2F;addr.o
+    CC    mips-softmmu&#x2F;hw&#x2F;mips&#x2F;cputimer.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;iwmmxt_helper.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;translate.o
+    CC    mipsel-softmmu&#x2F;memory_mapping.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;psci.o
+    CC    mipsel-softmmu&#x2F;hw&#x2F;mips&#x2F;mips_r4k.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;cpu64.o
+    CC    mipsel-softmmu&#x2F;hw&#x2F;mips&#x2F;addr.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;translate-a64.o
+    CC    mipsel-softmmu&#x2F;hw&#x2F;mips&#x2F;cputimer.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;translate.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;op_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;helper.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;helper-a64.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;dsp_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;cpu.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;unicorn_aarch64.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;op_helper.o
+    CC    aarch64-softmmu&#x2F;target-arm&#x2F;crypto_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;neon_helper.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;dsp_helper.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;lmi_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;iwmmxt_helper.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;op_helper.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;helper.o
+    GEN   mips64-softmmu&#x2F;config-target.h
+    CC    mips64-softmmu&#x2F;exec.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;psci.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;cpu.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;cpu64.o
+    CC    mips64-softmmu&#x2F;translate-all.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;msa_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;translate-a64.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;lmi_helper.o
+    CC    mips64-softmmu&#x2F;cpu-exec.o
+    CC    mips64-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;helper.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;cpu.o
+    CC    mips-softmmu&#x2F;target-mips&#x2F;unicorn.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;msa_helper.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;helper-a64.o
+    CC    mips64-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;unicorn_aarch64.o
+    GEN   mips64el-softmmu&#x2F;config-target.h
+    CC    mips64el-softmmu&#x2F;exec.o
+    CC    aarch64eb-softmmu&#x2F;target-arm&#x2F;crypto_helper.o
+    CC    mipsel-softmmu&#x2F;target-mips&#x2F;unicorn.o
+    CC    mips64-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    mips64el-softmmu&#x2F;translate-all.o
+    CC    mips64-softmmu&#x2F;cpus.o
+    GEN   sparc-softmmu&#x2F;config-target.h
+    CC    sparc-softmmu&#x2F;exec.o
+    CC    mips64el-softmmu&#x2F;cpu-exec.o
+    CC    mips64-softmmu&#x2F;ioport.o
+    CC    mips64el-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    sparc-softmmu&#x2F;translate-all.o
+    CC    mips64-softmmu&#x2F;memory.o
+    CC    mips64el-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    sparc-softmmu&#x2F;cpu-exec.o
+    CC    mips64-softmmu&#x2F;cputlb.o
+    CC    sparc-softmmu&#x2F;tcg&#x2F;tcg.o
+    GEN   sparc64-softmmu&#x2F;config-target.h
+    CC    mips64-softmmu&#x2F;memory_mapping.o
+    CC    sparc64-softmmu&#x2F;exec.o
+    CC    mips64el-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    sparc-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    mips64-softmmu&#x2F;hw&#x2F;mips&#x2F;mips_r4k.o
+    CC    sparc64-softmmu&#x2F;translate-all.o
+    CC    mips64-softmmu&#x2F;hw&#x2F;mips&#x2F;addr.o
+    CC    sparc-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    mips64-softmmu&#x2F;hw&#x2F;mips&#x2F;cputimer.o
+    CC    mips64el-softmmu&#x2F;cpus.o
+    CC    sparc64-softmmu&#x2F;cpu-exec.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;translate.o
+    CC    mips64el-softmmu&#x2F;ioport.o
+    CC    sparc64-softmmu&#x2F;tcg&#x2F;tcg.o
+    CC    mips64el-softmmu&#x2F;memory.o
+    CC    sparc-softmmu&#x2F;cpus.o
+    CC    sparc-softmmu&#x2F;ioport.o
+    CC    mips64el-softmmu&#x2F;cputlb.o
+    CC    sparc64-softmmu&#x2F;tcg&#x2F;optimize.o
+    CC    sparc-softmmu&#x2F;memory.o
+    CC    sparc64-softmmu&#x2F;fpu&#x2F;softfloat.o
+    CC    sparc-softmmu&#x2F;cputlb.o
+    CC    mips64el-softmmu&#x2F;memory_mapping.o
+    CC    mips64el-softmmu&#x2F;hw&#x2F;mips&#x2F;mips_r4k.o
+    CC    sparc-softmmu&#x2F;memory_mapping.o
+    CC    mips64el-softmmu&#x2F;hw&#x2F;mips&#x2F;addr.o
+    CC    sparc64-softmmu&#x2F;cpus.o
+    CC    mips64el-softmmu&#x2F;hw&#x2F;mips&#x2F;cputimer.o
+    CC    sparc-softmmu&#x2F;hw&#x2F;sparc&#x2F;leon3.o
+    CC    sparc64-softmmu&#x2F;ioport.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;translate.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;translate.o
+    CC    sparc64-softmmu&#x2F;memory.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;dsp_helper.o
+    CC    sparc64-softmmu&#x2F;cputlb.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;helper.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;cpu.o
+    CC    sparc64-softmmu&#x2F;memory_mapping.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;op_helper.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;fop_helper.o
+    CC    sparc64-softmmu&#x2F;hw&#x2F;sparc64&#x2F;sun4u.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;cc_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;translate.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;win_helper.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;mmu_helper.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;lmi_helper.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;ldst_helper.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;helper.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;int32_helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;dsp_helper.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;cpu.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;cpu.o
+    CC    sparc-softmmu&#x2F;target-sparc&#x2F;unicorn.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;msa_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;fop_helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;op_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;cc_helper.o
+    CC    mips64-softmmu&#x2F;target-mips&#x2F;unicorn.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;win_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;mmu_helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;lmi_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;ldst_helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;cpu.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;msa_helper.o
+    CC    mips64el-softmmu&#x2F;target-mips&#x2F;unicorn.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;int64_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;vis_helper.o
+    CC    sparc64-softmmu&#x2F;target-sparc&#x2F;unicorn64.o
+    GEN     libunicorn.1.dylib
+    GEN     libunicorn.a
+  ar: creating archive libunicorn.a
+  &#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;ranlib: file: libunicorn.a(qemu-timer-common.o) has no symbols
+  &#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;ranlib: file: libunicorn.a(qemu-timer-common.o) has no symbols
+  &#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;make -C samples
+  make: *** samples: No such file or directory.  Stop.
+  make: *** [all] Error 2
+  Traceback (most recent call last):
+    File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+    File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 274, in &lt;module&gt;
+      &#39;unicorn&#39;: [&#39;lib&#x2F;*&#39;, &#39;include&#x2F;unicorn&#x2F;*&#39;]
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;core.py&quot;, line 151, in setup
+      dist.run_commands()
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 953, in run_commands
+      self.run_command(cmd)
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 972, in run_command
+      cmd_obj.run()
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python&#x2F;wheel&#x2F;bdist_wheel.py&quot;, line 192, in run
+      self.run_command(&#39;build&#39;)
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;cmd.py&quot;, line 326, in run_command
+      self.distribution.run_command(command)
+    File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 972, in run_command
+      cmd_obj.run()
+    File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 204, in run
+      build_libraries()
+    File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 177, in build_libraries
+      shutil.copy(file, LIBS_DIR, follow_symlinks&#x3D;False)
+
+  TypeError: copy() got an unexpected keyword argument &#39;follow_symlinks&#39;
+  ----------------------------------------
+
+  ERROR: Failed building wheel for unicorn
+  Running setup.py clean for unicorn
+Successfully built pwn
+Failed to build unicorn
+Installing collected packages: unicorn, pynacl, bcrypt, paramiko, pwntools, pwn
+  Attempting uninstall: unicorn
+    Found existing installation: unicorn 1.0.3
+    Uninstalling unicorn-1.0.3:
+      Successfully uninstalled unicorn-1.0.3
+    Running setup.py install for unicorn ... error
+    ERROR: Command errored out with exit status 1:
+     command: &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Resources&#x2F;Python.app&#x2F;Contents&#x2F;MacOS&#x2F;Python -u -c &#39;import sys, setuptools, tokenize; sys.argv[0] &#x3D; &#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;; __file__&#x3D;&#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;;f&#x3D;getattr(tokenize, &#39;&quot;&#39;&quot;&#39;open&#39;&quot;&#39;&quot;&#39;, open)(__file__);code&#x3D;f.read().replace(&#39;&quot;&#39;&quot;&#39;\r\n&#39;&quot;&#39;&quot;&#39;, &#39;&quot;&#39;&quot;&#39;\n&#39;&quot;&#39;&quot;&#39;);f.close();exec(compile(code, __file__, &#39;&quot;&#39;&quot;&#39;exec&#39;&quot;&#39;&quot;&#39;))&#39; install --record &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-record-bgOB1C&#x2F;install-record.txt --single-version-externally-managed --user --prefix&#x3D; --compile --install-headers &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;include&#x2F;python2.7&#x2F;unicorn
+         cwd: &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;
+    Complete output (31 lines):
+    &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python&#x2F;setuptools&#x2F;dist.py:472: UserWarning: Normalizing &#39;1.0.2.rc3&#39; to &#39;1.0.2rc3&#39;
+      normalized_version,
+    running install
+    running build
+    Building C extensions
+    &#x2F;Library&#x2F;Developer&#x2F;CommandLineTools&#x2F;usr&#x2F;bin&#x2F;make -C samples
+    make: *** samples: No such file or directory.  Stop.
+    make: *** [all] Error 2
+    Traceback (most recent call last):
+      File &quot;&lt;string&gt;&quot;, line 1, in &lt;module&gt;
+      File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 274, in &lt;module&gt;
+        &#39;unicorn&#39;: [&#39;lib&#x2F;*&#39;, &#39;include&#x2F;unicorn&#x2F;*&#39;]
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;core.py&quot;, line 151, in setup
+        dist.run_commands()
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 953, in run_commands
+        self.run_command(cmd)
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 972, in run_command
+        cmd_obj.run()
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Extras&#x2F;lib&#x2F;python&#x2F;setuptools&#x2F;command&#x2F;install.py&quot;, line 61, in run
+        return orig.install.run(self)
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;command&#x2F;install.py&quot;, line 573, in run
+        self.run_command(&#39;build&#39;)
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;cmd.py&quot;, line 326, in run_command
+        self.distribution.run_command(command)
+      File &quot;&#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;lib&#x2F;python2.7&#x2F;distutils&#x2F;dist.py&quot;, line 972, in run_command
+        cmd_obj.run()
+      File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 204, in run
+        build_libraries()
+      File &quot;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&quot;, line 177, in build_libraries
+        shutil.copy(file, LIBS_DIR, follow_symlinks&#x3D;False)
+    TypeError: copy() got an unexpected keyword argument &#39;follow_symlinks&#39;
+    ----------------------------------------
+  Rolling back uninstall of unicorn
+  Moving to &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages&#x2F;unicorn-1.0.3.dist-info&#x2F;
+   from &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages&#x2F;~nicorn-1.0.3.dist-info
+  Moving to &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages&#x2F;unicorn&#x2F;
+   from &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;lib&#x2F;python&#x2F;site-packages&#x2F;~nicorn
+ERROR: Command errored out with exit status 1: &#x2F;System&#x2F;Library&#x2F;Frameworks&#x2F;Python.framework&#x2F;Versions&#x2F;2.7&#x2F;Resources&#x2F;Python.app&#x2F;Contents&#x2F;MacOS&#x2F;Python -u -c &#39;import sys, setuptools, tokenize; sys.argv[0] &#x3D; &#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;; __file__&#x3D;&#39;&quot;&#39;&quot;&#39;&#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-install-vxEjTg&#x2F;unicorn&#x2F;setup.py&#39;&quot;&#39;&quot;&#39;;f&#x3D;getattr(tokenize, &#39;&quot;&#39;&quot;&#39;open&#39;&quot;&#39;&quot;&#39;, open)(__file__);code&#x3D;f.read().replace(&#39;&quot;&#39;&quot;&#39;\r\n&#39;&quot;&#39;&quot;&#39;, &#39;&quot;&#39;&quot;&#39;\n&#39;&quot;&#39;&quot;&#39;);f.close();exec(compile(code, __file__, &#39;&quot;&#39;&quot;&#39;exec&#39;&quot;&#39;&quot;&#39;))&#39; install --record &#x2F;private&#x2F;var&#x2F;folders&#x2F;6k&#x2F;fdkg_n356c34dm04hrnj66k00000gn&#x2F;T&#x2F;pip-record-bgOB1C&#x2F;install-record.txt --single-version-externally-managed --user --prefix&#x3D; --compile --install-headers &#x2F;Users&#x2F;loki&#x2F;Library&#x2F;Python&#x2F;2.7&#x2F;include&#x2F;python2.7&#x2F;unicorn Check the logs for full command output.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<p>谷歌了一圈相关的解决方法, 都没有成功。这时候看到可以通过brew安装pwntools，于是尝试一下。</p>
+<h3 id="brew安装"><a href="#brew安装" class="headerlink" title="brew安装"></a>brew安装</h3><p>网上很多大佬都推荐在brew下安装pwntools，以避免pip安装时发生错误（虽然我在pip3没遇到），于是我尝试在brew下安装。执行<code>brew install pwntools</code>后，安装的版本是4.6且对应版本为python3，</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/Users/loki/workspace/NOTE/img/image-20210803232531922.png" alt="image-20210803232531922"></p>
+<p>查看资料得知最后一个带有python2的版本是3.13.0，于是尝试安装旧版pwntools：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token builtin class-name">cd</span> <span class="token string">"<span class="token variable"><span class="token variable">$(</span>brew --repo homebrew/core<span class="token variable">)</span></span>"</span>
+<span class="token function">git</span> log master -- Formula/pwntools.rb //找到合适的版本
+<span class="token function">git</span> checkout 哈希值
+<span class="token assign-left variable">HOMEBREW_NO_AUTO_UPDATE</span><span class="token operator">=</span><span class="token number">1</span> brew <span class="token function">install</span> pwntools<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但是发现软件源中已经不提供这个版本的bottle了</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="/Users/loki/workspace/NOTE/img/image-20210803233146762.png" alt="image-20210803233146762"></p>
+<h3 id="源码安装"><a href="#源码安装" class="headerlink" title="源码安装"></a>源码安装</h3><p>上面的办法都没办法安装，于是只能从源码入手</p>
+<p>在<a target="_blank" rel="noopener" href="https://github.com/Gallopsled/pwntools%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81%EF%BC%8C%E7%94%A8python2%E6%89%A7%E8%A1%8Csetup.py%EF%BC%9A">https://github.com/Gallopsled/pwntools下载源码，用python2执行setup.py：</a></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">python2 setup.py build
+<span class="token function">sudo</span> python2 setup.py <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>这一次安装成功，安装3.13.0和4.6.0都可以，安装4.6.0时会出现编译unicorn的错误，但是可以不用理会，这时候pwntools 4.6.0已经安装进去了，而安装3.13.0时并没有unicorn这个组件所以安装非常顺利。</p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/image-20210803233854456.png" alt="image-20210803233854456"></p>
+<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/image-20210803233913801.png" alt="image-20210803233913801"></p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a><a class="post-meta__tags" href="/tags/PWN/">PWN</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/20210609130039.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Android逆向调试环境搭建</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/logo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">10</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">16</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3"><span class="toc-number">2.</span> <span class="toc-text">解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-number">2.1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pip%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.</span> <span class="toc-text">pip安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#brew%E5%AE%89%E8%A3%85"><span class="toc-number">2.3.</span> <span class="toc-text">brew安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85"><span class="toc-number">2.4.</span> <span class="toc-text">源码安装</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="macOS11中安装pwntools with python2"/></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="发表于 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/20210609130039.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android逆向调试环境搭建"/></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="发表于 2021-06-09 10:20:08">2021-06-09</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/02/CVE-2021-3493%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" title="CVE-2021-3493漏洞分析"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/ubuntu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="CVE-2021-3493漏洞分析"/></a><div class="content"><a class="title" href="/2021/06/02/CVE-2021-3493%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" title="CVE-2021-3493漏洞分析">CVE-2021-3493漏洞分析</a><time datetime="2021-06-02T03:21:47.000Z" title="发表于 2021-06-02 11:21:47">2021-06-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/27/Ubuntu%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-CVE-2021-3493/" title="Ubuntu内核提权漏洞复现(CVE-2021-3493)"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/ubuntu.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Ubuntu内核提权漏洞复现(CVE-2021-3493)"/></a><div class="content"><a class="title" href="/2021/05/27/Ubuntu%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-CVE-2021-3493/" title="Ubuntu内核提权漏洞复现(CVE-2021-3493)">Ubuntu内核提权漏洞复现(CVE-2021-3493)</a><time datetime="2021-05-27T09:28:47.000Z" title="发表于 2021-05-27 17:28:47">2021-05-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/05/18/Arch-Linux%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/" title="Arch Linux安装笔记"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/gh/starryloki/cdn@master/img/20210518182516.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Arch Linux安装笔记"/></a><div class="content"><a class="title" href="/2021/05/18/Arch-Linux%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/" title="Arch Linux安装笔记">Arch Linux安装笔记</a><time datetime="2021-05-18T10:19:55.000Z" title="发表于 2021-05-18 18:19:55">2021-05-18</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2021 By Loki</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'th87MO7LYAcAV1QbXw1vd6gJ-gzGzoHsz',
+      appKey: 'PWMOPMXVzkqTWmayHO5etuIt',
+      placeholder: 'Please leave your footprints',
+      avatar: 'monsterid',
+      meta: 'nick,mail'.split(','),
+      pageSize: '10',
+      lang: 'en',
+      recordIP: true,
+      serverURLs: '',
+      emojiCDN: '',
+      emojiMaps: "",
+      enableQQ: false,
+      path: window.location.pathname,
+      requiredFields: ["nick"],
+      visitor: false
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !false) {
+  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
