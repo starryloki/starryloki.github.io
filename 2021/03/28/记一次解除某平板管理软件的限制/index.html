@@ -1,37 +1,22 @@
-<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>记一次解除某平板管理软件的限制 | Loki's Blog</title><meta name="keywords" content="逆向,Java,Smali"><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言大部分采用智慧课堂教学的学校都是用某平板管理软件进行对平板的管控，能实现限制网络连接，限制APP的安装，实时获取设备信息等。这里将会介绍解除平板管控的一些已经验证过可用的思路。这是一个两年半之前实施的项目,因为一些数据丢失的原因这里无法进行整个系统的环境复现，也没有太多成果截图，这里只能根据好友共享的系统镜像最大限度地还原当时的思路。 环境概述拿到平板之后，简单的测试了一下，发现许多可以利用的">
-<meta property="og:type" content="article">
-<meta property="og:title" content="记一次解除某平板管理软件的限制">
-<meta property="og:url" content="http://example.com/2021/03/28/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E9%99%A4%E6%9F%90%E5%B9%B3%E6%9D%BF%E7%AE%A1%E7%90%86%E8%BD%AF%E4%BB%B6%E7%9A%84%E9%99%90%E5%88%B6/index.html">
-<meta property="og:site_name" content="Loki&#39;s Blog">
-<meta property="og:description" content="前言大部分采用智慧课堂教学的学校都是用某平板管理软件进行对平板的管控，能实现限制网络连接，限制APP的安装，实时获取设备信息等。这里将会介绍解除平板管控的一些已经验证过可用的思路。这是一个两年半之前实施的项目,因为一些数据丢失的原因这里无法进行整个系统的环境复现，也没有太多成果截图，这里只能根据好友共享的系统镜像最大限度地还原当时的思路。 环境概述拿到平板之后，简单的测试了一下，发现许多可以利用的">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.starryloki.com/2023/07/5b69a9e393ad68692266e8faef4055bb.png">
-<meta property="article:published_time" content="2021-03-28T00:07:15.000Z">
-<meta property="article:modified_time" content="2023-11-09T12:51:44.098Z">
-<meta property="article:author" content="Loki">
-<meta property="article:tag" content="逆向">
-<meta property="article:tag" content="Java">
-<meta property="article:tag" content="Smali">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.starryloki.com/2023/07/5b69a9e393ad68692266e8faef4055bb.png"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2021/03/28/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E9%99%A4%E6%9F%90%E5%B9%B3%E6%9D%BF%E7%AE%A1%E7%90%86%E8%BD%AF%E4%BB%B6%E7%9A%84%E9%99%90%E5%88%B6/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>记一次解除某平板管理软件的限制 | Loki's Blog</title><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言大部分采用智慧课堂教学的学校都是用某平板管理软件进行对平板的管控，能实现限制网络连接，限制APP的安装，实时获取设备信息等。这里将会介绍解除平板管控的一些已经验证过可用的思路。这是一个两年半之前实施的项目,因为一些数据丢失的原因这里无法进行整个系统的环境复现，也没有太多成果截图，这里只能根据好友"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2021/03/28/%E8%AE%B0%E4%B8%80%E6%AC%A1%E8%A7%A3%E9%99%A4%E6%9F%90%E5%B9%B3%E6%9D%BF%E7%AE%A1%E7%90%86%E8%BD%AF%E4%BB%B6%E7%9A%84%E9%99%90%E5%88%B6/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
   runtime: '',
-  date_suffix: {
-    just: 'Just',
+  dateSuffix: {
+    just: 'Just now',
     min: 'minutes ago',
     hour: 'hours ago',
     day: 'days ago',
@@ -40,20 +25,18 @@
   copyright: undefined,
   lightbox: 'fancybox',
   Snackbar: undefined,
-  source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
-    }
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
   },
   isPhotoFigcaption: false,
   islazyload: true,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '记一次解除某平板管理软件的限制',
   isPost: true,
@@ -61,69 +44,77 @@
   isHighlightShrink: false,
   isToc: true,
   postUpdate: '2023-11-09 20:51:44'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
         }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
       }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-      win.activateDarkMode = function () {
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
         }
       }
-      win.activateLightMode = function () {
+      win.activateLightMode = () => {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
@@ -145,7 +136,7 @@
               const isNight = hour <= 6 || hour >= 18
               isNight ? activateDarkMode() : activateLightMode()
             }
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
               if (saveToLocal.get('theme') === undefined) {
                 e.matches ? activateDarkMode() : activateLightMode()
               }
@@ -161,7 +152,14 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.starryloki.com/2023/07/5b69a9e393ad68692266e8faef4055bb.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Loki's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">记一次解除某平板管理软件的限制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-03-28T00:07:15.000Z" title="Created 2021-03-28 08:07:15">2021-03-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-09T12:51:44.098Z" title="Updated 2023-11-09 20:51:44">2023-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>8min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="记一次解除某平板管理软件的限制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大部分采用智慧课堂教学的学校都是用某平板管理软件进行对平板的管控，能实现限制网络连接，限制APP的安装，实时获取设备信息等。这里将会介绍解除平板管控的一些已经验证过可用的思路。这是一个两年半之前实施的项目,因为一些数据丢失的原因这里无法进行整个系统的环境复现，也没有太多成果截图，这里只能根据好友共享的系统镜像最大限度地还原当时的思路。</p>
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.starryloki.com/2023/07/5b69a9e393ad68692266e8faef4055bb.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Loki's Blog"><span class="site-name">Loki's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">记一次解除某平板管理软件的限制</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-03-28T00:07:15.000Z" title="Created 2021-03-28 08:07:15">2021-03-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-09T12:51:44.098Z" title="Updated 2023-11-09 20:51:44">2023-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>8mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="记一次解除某平板管理软件的限制"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>大部分采用智慧课堂教学的学校都是用某平板管理软件进行对平板的管控，能实现限制网络连接，限制APP的安装，实时获取设备信息等。这里将会介绍解除平板管控的一些已经验证过可用的思路。这是一个两年半之前实施的项目,因为一些数据丢失的原因这里无法进行整个系统的环境复现，也没有太多成果截图，这里只能根据好友共享的系统镜像最大限度地还原当时的思路。</p>
 <h2 id="环境概述"><a href="#环境概述" class="headerlink" title="环境概述"></a>环境概述</h2><p>拿到平板之后，简单的测试了一下，发现许多可以利用的点：</p>
 <ul>
 <li>平板采用高度定制的安卓7.1.1系统</li>
@@ -174,14 +172,14 @@
 </ul>
 <h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><p>为了更加透彻地了解这个系统，我利用短暂的ADB进入bootloader并解锁bootloader，然后刷入TWRP，将系统的镜像提取了出来，检视应用列表后发现，对平板的限制极有可能是由包名为<code>com.android.launcher3</code>的定制桌面操控，于是开始整活。</p>
 <h2 id="解除过程"><a href="#解除过程" class="headerlink" title="解除过程"></a>解除过程</h2><h3 id="尝试卸载桌面"><a href="#尝试卸载桌面" class="headerlink" title="尝试卸载桌面"></a>尝试卸载桌面</h3><p>既然是有可能由桌面操控，那么卸载掉桌面极有可能会解除管控，对桌面使用dex2jar进行简单逆向，发现在设备从未联网时，管理员默认密码为<code>xunfei!!@</code>，于是在bootloader双清设备，启动系统，断网并进入管理员登录界面，输入默认密码成功进入管理员界面，管理员界面功能如下：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/e5dab2c125b9ddef957287c031d89cfd.png" alt="defupass"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/e5dab2c125b9ddef957287c031d89cfd.png" alt="defupass"></p>
 <center>
 源码中的默认密码
 </br>
 </center>
 
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/49f7797c9e9f696427312d3a07f2898d.jpeg" alt="admin"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/49f7797c9e9f696427312d3a07f2898d.jpeg" alt="admin"></p>
 <center>
 管理员设置界面
 </br>
@@ -189,7 +187,7 @@
 
 
 <p>虽然那个解除限制十分诱人，但是后期的逆向发现这是对平板使用限制的解除而非App或TCP/IP的限制。回到正题，我们打开usb连接电脑，并连接电脑，顺利进入adb调试界面，于是执行<code>adb uninstall com.android.launcher3</code>以及<code>adb install newdesk.apk</code>，完成后重启设备，由于其内置的部分App有内嵌Web访问以访问登录或重置密码的网页，我们可以使用ARP劫持使其强行访问我们指定的网站，测试结果发现卸载com.android.launcher3后，网址白名单已被解除，然而App的安装限制仍未解除，这更加印证了com.android.launcher3对平板的限制有着千丝万缕的联系。也意味着我们需要进行进一步的逆向。</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/ed6cf66e75c0296f0b6e974e0ac99b74.jpeg" alt="baidu"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/ed6cf66e75c0296f0b6e974e0ac99b74.jpeg" alt="baidu"></p>
 <center>
 卸载桌面并使用ARP劫持后成功访问白名单外的网页
 </br>
@@ -197,7 +195,7 @@
 
 
 <h3 id="攻破管理员登录"><a href="#攻破管理员登录" class="headerlink" title="攻破管理员登录"></a>攻破管理员登录</h3><p>从前面的研究结果来看，管理员界面是一个极为关键的跳板，如果能绕过管理员界面或得到密码将会对后面对操作有极大的帮助，于是开始审阅源码。在逆向出来的jar包里，很容易发现一个名为<code>LoginActivity</code>的类控制着管理员登录界面，得到了登录相关的方法</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/8ad1e57252e94482baddff708ad4ba31.png" alt="login"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/8ad1e57252e94482baddff708ad4ba31.png" alt="login"></p>
 <center>
 登录方法的Java源码
 </br>
@@ -205,7 +203,7 @@
 
 
 <p>显然我们可以修改源文件以将“用户名且密码正确”的逻辑改成“用户名或密码正确”或者“用户名正确且密码错误”以达到输入任意值即可进入管理员界面。但是我们并不能直接编辑dex2jar得到的java文件，我们需要更深一层，通过对照java源代码去编辑Smali文件，好在Smali语言不算特别难理解，很快发现逻辑判断的地方，如图：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/d92a45a0315b9fb11d0cfa012af4c75b.png" alt="loginsmali"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/d92a45a0315b9fb11d0cfa012af4c75b.png" alt="loginsmali"></p>
 <center>
 判断逻辑的Smali代码解析
 </br>
@@ -224,13 +222,13 @@ invoke-virtual <span class="token punctuation">&#123;</span><span class="token r
 <h3 id="网址白名单的解除"><a href="#网址白名单的解除" class="headerlink" title="网址白名单的解除"></a>网址白名单的解除</h3><p>虽然管理员界面有方法添加网址白名单，但是只能一个一个网址地添加而且有被服务端配置覆盖的风险，自然不可取，而前文提到卸载平板管理软件后重启系统网址白名单即解除，那么可以推出在设备开机之后平板管理手动启动了网址白名单，至少有一个管理开机后的操作或者初始化的类包含了白名单的开关，于是我们继续逆向，发现一个叫“BootCheckReceiver”类操控着开机启动后的操作，在里面发现了相关方法，Java代码如下：</p>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/29c93c85b6f746be6a8651c068d15046.png" alt="firewall"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/29c93c85b6f746be6a8651c068d15046.png" alt="firewall"></p>
 </center>
 
 <p>这段代码十分好理解，读取配置如果为limit则启用防火墙，我们自然不会去修改可能被服务端覆盖的配置来达到效果，而enableFireWall前面名为“MDM”的类引起了我的注意，根据import的索引，我跳转到这个类，发现是一个根据设备型号进行类索引的“中枢”，而我手上的平板对应的类如下：</p>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/490729cb65bf18f269cd0e8ddd9c40ae.png" alt="device"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/490729cb65bf18f269cd0e8ddd9c40ae.png" alt="device"></p>
 </center>
 
 <p>于是我们前往这个类，发现许多有意思的方法，这里列举一部分：</p>
@@ -249,7 +247,7 @@ invoke-interface <span class="token punctuation">&#123;</span> <span class="toke
 <h3 id="MDM-x的第三方调用"><a href="#MDM-x的第三方调用" class="headerlink" title="MDM.x的第三方调用"></a>MDM.x的第三方调用</h3><p>我们已经大致了解了平板管控的原理，定制的系统提供API，平板管理软件通过MDM.x的方法与API对接，而在调用API时并未发现任何验证措施，如果我们自己写一个安卓APP，引入MDM相关的类和方法，是否也可以调用系统提供的API呢？</p>
 <p>答案是肯定的，如果有安卓APP开发基础，我们可以直接将与MDM调用API有关联的类导入到自己的APP，做好索引后即可使用<code>MDM.x.</code>调用系统API；如果不会开发相关APP，我们可以在平板管理里找到一个有交互性且调用了MDM类的Activity，比如管理员设置。</p>
 <p>我们可以直接前往管理员设置所对应的Smali文件，将已存在的方法调用替换成对MDM.x的调用，比如：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/4e34a777fe2853df604603f0d89cc5ef.png" alt="MDM"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/4e34a777fe2853df604603f0d89cc5ef.png" alt="MDM"></p>
 <center>
 管理员设置中的MDM调用
 </br>
@@ -274,8 +272,8 @@ invoke-interface <span class="token punctuation">&#123;</span> <span class="toke
 
 <p>顺着上传应用列表的方法，在其他类中找到了自动上传位置和应用列表的类，于是在Smali中将将要上传的返回值用空白变量劫持，这样就大致脱离了服务器对设备的监控。</p>
 <h3 id="伪装成客户端从服务器爬数据"><a href="#伪装成客户端从服务器爬数据" class="headerlink" title="伪装成客户端从服务器爬数据"></a>伪装成客户端从服务器爬数据</h3><p>前文提到管理员密码等配置会随服务器更新，于是我找到了这个类，我们可以依照上面调用MDM.x的思路，在第三方APP引入这个类及其依赖的类，在输入schoolid等数据之后，即可直接获取管理员密码等关键信息。</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/10a064446868fb5624750785c07d8180.png" alt="code1"><br><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/d9a45e19206ddcedec93363f3aa91bee.png" alt="code2"></p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/34708bc00821bfde1b6c10dd4113471a.jpeg" alt="CMD"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/10a064446868fb5624750785c07d8180.png" alt="code1"><br><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/d9a45e19206ddcedec93363f3aa91bee.png" alt="code2"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/34708bc00821bfde1b6c10dd4113471a.jpeg" alt="CMD"></p>
 <center>
 解除限制后安装第三方APP以及使用DEX注入劫持背景图
 </br>
@@ -290,43 +288,38 @@ invoke-interface <span class="token punctuation">&#123;</span> <span class="toke
 </ul>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/ab6620cfa1cfec18e727f7dc74e29f7b.png" alt="code1"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/ab6620cfa1cfec18e727f7dc74e29f7b.png" alt="code1"></p>
 </br>
 </center>
 
 <p>解除这类平板使用限制的方法还有很多，比如从万能的xda下载机型的官方系统包直接刷入等等，虽然十分简单粗暴，但是却少了许多逆向的乐趣。</p>
 <p>EOF</p>
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%80%86%E5%90%91/">逆向</a><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/Smali/">Smali</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2023/07/5b69a9e393ad68692266e8faef4055bb.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/10/CentOS8%E4%B8%8B%E5%BC%80%E5%90%AFL2TP%E5%90%8EFirewalld%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div><div class="next-post pull-right"><a href="/2021/02/22/%E4%BD%BF%E7%94%A8%E4%B8%80%E6%9D%A1frp%E9%9A%A7%E9%81%93%E8%AE%BF%E9%97%AE%E5%A4%9A%E4%B8%AA%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/8c7e4e2985c4c7b647eecb52d27ec6a3.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">使用一条FRP隧道访问多个内网服务</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">环境概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">解除过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E5%8D%B8%E8%BD%BD%E6%A1%8C%E9%9D%A2"><span class="toc-number">4.1.</span> <span class="toc-text">尝试卸载桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E7%A0%B4%E7%AE%A1%E7%90%86%E5%91%98%E7%99%BB%E5%BD%95"><span class="toc-number">4.2.</span> <span class="toc-text">攻破管理员登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E5%9D%80%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E8%A7%A3%E9%99%A4"><span class="toc-number">4.3.</span> <span class="toc-text">网址白名单的解除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDM-x%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B0%83%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">MDM.x的第三方调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E8%A7%A3%E9%99%A4"><span class="toc-number">4.5.</span> <span class="toc-text">应用白名单的解除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4%E4%BA%91%E7%AB%AF%E7%9B%91%E6%8E%A7"><span class="toc-number">4.6.</span> <span class="toc-text">解除云端监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%AA%E8%A3%85%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%88%AC%E6%95%B0%E6%8D%AE"><span class="toc-number">4.7.</span> <span class="toc-text">伪装成客户端从服务器爬数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="将 Dolby Vision Profile 7 转换为 Profile 8"/></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"/></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络威胁数据联盟暑期班CTF WP"/></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="macOS11中安装pwntools with python2"/></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android逆向调试环境搭建"/></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%80%86%E5%90%91/">逆向</a><a class="post-meta__tags" href="/tags/Java/">Java</a><a class="post-meta__tags" href="/tags/Smali/">Smali</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/04/10/CentOS8%E4%B8%8B%E5%BC%80%E5%90%AFL2TP%E5%90%8EFirewalld%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="CentOS8下开启L2TP后Firewalld失效的解决方法"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div><div class="next-post pull-right"><a href="/2021/02/22/%E4%BD%BF%E7%94%A8%E4%B8%80%E6%9D%A1frp%E9%9A%A7%E9%81%93%E8%AE%BF%E9%97%AE%E5%A4%9A%E4%B8%AA%E5%86%85%E7%BD%91%E6%9C%8D%E5%8A%A1/" title="使用一条FRP隧道访问多个内网服务"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/8c7e4e2985c4c7b647eecb52d27ec6a3.png"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">使用一条FRP隧道访问多个内网服务</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">环境概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">准备工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">解除过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%9D%E8%AF%95%E5%8D%B8%E8%BD%BD%E6%A1%8C%E9%9D%A2"><span class="toc-number">4.1.</span> <span class="toc-text">尝试卸载桌面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%BB%E7%A0%B4%E7%AE%A1%E7%90%86%E5%91%98%E7%99%BB%E5%BD%95"><span class="toc-number">4.2.</span> <span class="toc-text">攻破管理员登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E5%9D%80%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E8%A7%A3%E9%99%A4"><span class="toc-number">4.3.</span> <span class="toc-text">网址白名单的解除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MDM-x%E7%9A%84%E7%AC%AC%E4%B8%89%E6%96%B9%E8%B0%83%E7%94%A8"><span class="toc-number">4.4.</span> <span class="toc-text">MDM.x的第三方调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E8%A7%A3%E9%99%A4"><span class="toc-number">4.5.</span> <span class="toc-text">应用白名单的解除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E9%99%A4%E4%BA%91%E7%AB%AF%E7%9B%91%E6%8E%A7"><span class="toc-number">4.6.</span> <span class="toc-text">解除云端监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BC%AA%E8%A3%85%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%BB%8E%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%88%AC%E6%95%B0%E6%8D%AE"><span class="toc-number">4.7.</span> <span class="toc-text">伪装成客户端从服务器爬数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><div style="background: https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png"></div></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><div style="background: https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png"></div></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
     const valine = new Valine(Object.assign({
       el: '#vcomment',
       appId: 'th87MO7LYAcAV1QbXw1vd6gJ-gzGzoHsz',
       appKey: 'PWMOPMXVzkqTWmayHO5etuIt',
-      placeholder: 'Please leave your footprints',
       avatar: 'monsterid',
-      meta: 'nick,mail'.split(','),
-      pageSize: '10',
-      lang: 'en',
-      recordIP: true,
       serverURLs: '',
-      emojiCDN: '',
       emojiMaps: "",
-      enableQQ: false,
       path: window.location.pathname,
-      requiredFields: ["nick"],
       visitor: false
     }, null))
   }
 
-  if (typeof Valine === 'function') initValine() 
-  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
-}
-
-if ('Valine' === 'Valine' || !false) {
-  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-  else setTimeout(loadValine, 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
   }
-}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

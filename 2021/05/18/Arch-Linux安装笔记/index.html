@@ -1,35 +1,22 @@
-<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Arch Linux安装笔记 | Loki's Blog</title><meta name="keywords" content="Linux"><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言虽然macOS属于类Unix系统，但是有许多操作还是要在Linux上操作，比如编译Linux或着运行一些没有移植到macOS的应用，于是就产生了安装一个Linux系统的需求，而如果安装macOS+Linux多系统的话，驱动和切换系统都比较麻烦，所以我选择安装一个Linux的虚拟机。 发行版选择这一次安装我打算安装Arch Linux，这个发行版拥有极为强大的包管理器、拥有详细的Wiki以及强大">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Arch Linux安装笔记">
-<meta property="og:url" content="http://example.com/2021/05/18/Arch-Linux%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/index.html">
-<meta property="og:site_name" content="Loki&#39;s Blog">
-<meta property="og:description" content="前言虽然macOS属于类Unix系统，但是有许多操作还是要在Linux上操作，比如编译Linux或着运行一些没有移植到macOS的应用，于是就产生了安装一个Linux系统的需求，而如果安装macOS+Linux多系统的话，驱动和切换系统都比较麻烦，所以我选择安装一个Linux的虚拟机。 发行版选择这一次安装我打算安装Arch Linux，这个发行版拥有极为强大的包管理器、拥有详细的Wiki以及强大">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.starryloki.com/2023/11/e7c3ae9f233b14c8520e8b08ad75f0e0.png">
-<meta property="article:published_time" content="2021-05-18T10:19:55.000Z">
-<meta property="article:modified_time" content="2023-11-09T12:53:27.184Z">
-<meta property="article:author" content="Loki">
-<meta property="article:tag" content="Linux">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.starryloki.com/2023/11/e7c3ae9f233b14c8520e8b08ad75f0e0.png"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2021/05/18/Arch-Linux%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Arch Linux安装笔记 | Loki's Blog</title><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="前言虽然macOS属于类Unix系统，但是有许多操作还是要在Linux上操作，比如编译Linux或着运行一些没有移植到macOS的应用，于是就产生了安装一个Linux系统的需求，而如果安装macOS+Linux多系统的话，驱动和切换系统都比较麻烦，所以我选择安装一个Linux的虚拟机。 发行版选择这"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2021/05/18/Arch-Linux%E5%AE%89%E8%A3%85%E7%AC%94%E8%AE%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
   runtime: '',
-  date_suffix: {
-    just: 'Just',
+  dateSuffix: {
+    just: 'Just now',
     min: 'minutes ago',
     hour: 'hours ago',
     day: 'days ago',
@@ -38,20 +25,18 @@
   copyright: undefined,
   lightbox: 'fancybox',
   Snackbar: undefined,
-  source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
-    }
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
   },
   isPhotoFigcaption: false,
   islazyload: true,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: 'Arch Linux安装笔记',
   isPost: true,
@@ -59,69 +44,77 @@
   isHighlightShrink: false,
   isToc: true,
   postUpdate: '2023-11-09 20:53:27'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
         }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
       }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-      win.activateDarkMode = function () {
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
         }
       }
-      win.activateLightMode = function () {
+      win.activateLightMode = () => {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
@@ -143,7 +136,7 @@
               const isNight = hour <= 6 || hour >= 18
               isNight ? activateDarkMode() : activateLightMode()
             }
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
               if (saveToLocal.get('theme') === undefined) {
                 e.matches ? activateDarkMode() : activateLightMode()
               }
@@ -159,11 +152,18 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.starryloki.com/2023/11/e7c3ae9f233b14c8520e8b08ad75f0e0.png')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Loki's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Arch Linux安装笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-05-18T10:19:55.000Z" title="Created 2021-05-18 18:19:55">2021-05-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-09T12:53:27.184Z" title="Updated 2023-11-09 20:53:27">2023-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>5min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Arch Linux安装笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>虽然macOS属于类Unix系统，但是有许多操作还是要在Linux上操作，比如编译Linux或着运行一些没有移植到macOS的应用，于是就产生了安装一个Linux系统的需求，而如果安装macOS+Linux多系统的话，驱动和切换系统都比较麻烦，所以我选择安装一个Linux的虚拟机。</p>
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.starryloki.com/2023/11/e7c3ae9f233b14c8520e8b08ad75f0e0.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Loki's Blog"><span class="site-name">Loki's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Arch Linux安装笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2021-05-18T10:19:55.000Z" title="Created 2021-05-18 18:19:55">2021-05-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-09T12:53:27.184Z" title="Updated 2023-11-09 20:53:27">2023-11-09</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>5mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Arch Linux安装笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>虽然macOS属于类Unix系统，但是有许多操作还是要在Linux上操作，比如编译Linux或着运行一些没有移植到macOS的应用，于是就产生了安装一个Linux系统的需求，而如果安装macOS+Linux多系统的话，驱动和切换系统都比较麻烦，所以我选择安装一个Linux的虚拟机。</p>
 <h2 id="发行版选择"><a href="#发行版选择" class="headerlink" title="发行版选择"></a>发行版选择</h2><p>这一次安装我打算安装Arch Linux，这个发行版拥有极为强大的包管理器、拥有详细的Wiki以及强大的社区支持，同时具有可高度定制安装的特点，是一个非常适合开发者的发行版。至于为什么不用Ubuntu或者CentOS呢？<del>想换个口味</del> 这些发行版并不具有以上特性。</p>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ca423b812b4dd57eec5d01eaa2e26afc.jpg" alt="DOGE"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ca423b812b4dd57eec5d01eaa2e26afc.jpg" alt="DOGE"></p>
 </center>
 
 <h2 id="安装环境"><a href="#安装环境" class="headerlink" title="安装环境"></a>安装环境</h2><p>平台：macOS 11.3.1 x86_64 with VMWare Fusion 12.1.1<br>系统：Arch Linux 2021.04.01 x86_64</p>
@@ -171,12 +171,12 @@
 <h3 id="新建虚拟机"><a href="#新建虚拟机" class="headerlink" title="新建虚拟机"></a>新建虚拟机</h3><p>VMWare新建虚拟机时可以选择 <code>Other Linux 5.x and later kernel 64-bit</code> 并在启动方式选择UEFI模式启动</p>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/5c0b2b631926f6ee9e6069896c30e72d.png" alt="Choose"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/5c0b2b631926f6ee9e6069896c30e72d.png" alt="Choose"></p>
 </center>
 
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/23f2b049f970129cbc098f60577f855b.png" alt="Choose"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/23f2b049f970129cbc098f60577f855b.png" alt="Choose"></p>
 </center>
 
 <p>之后将CD/ROM指向的光驱文件指向ArchLinux的安装镜像即可</p>
@@ -199,7 +199,7 @@
 
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/79274c7054d059e67591252fba424971.png" alt="Choose"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/79274c7054d059e67591252fba424971.png" alt="Choose"></p>
 </center>
 
 <p>得到我们的主硬盘是sda，之后可以使用cfdisk进行分区：</p>
@@ -340,44 +340,39 @@ systemctl <span class="token builtin class-name">enable</span> sddm<span aria-hi
 <p>安装完成后重启即可，效果图如下：</p>
 <center>
 
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/85b83cdbc51f4ee86a36b36bc1b4881d.png" alt="Choose"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/85b83cdbc51f4ee86a36b36bc1b4881d.png" alt="Choose"></p>
 </center>
 
 <p>后续安装软件可能会用到Aur助手：</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> pacman -S yay<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p>至此，Archlinux安装已经完成。<br>EOF</p>
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2023/11/e7c3ae9f233b14c8520e8b08ad75f0e0.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/27/Ubuntu%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-CVE-2021-3493/"><img class="prev-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/c03a06a10d26f29f66fa8206e35fa952.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">Ubuntu内核提权漏洞复现(CVE-2021-3493)</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/10/CentOS8%E4%B8%8B%E5%BC%80%E5%90%AFL2TP%E5%90%8EFirewalld%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span> Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2021/04/10/CentOS8下开启L2TP后Firewalld失效的解决方法/" title="CentOS8下开启L2TP后Firewalld失效的解决方法"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-10</div><div class="title">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div><div><a href="/2021/01/31/在M1-Mac中安装Kali-Linux/" title="在M1 Mac中安装Kali Linux"><img class="cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/42767cecadbfbe023c6bb470cbedcedb.png" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-31</div><div class="title">在M1 Mac中安装Kali Linux</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E8%A1%8C%E7%89%88%E9%80%89%E6%8B%A9"><span class="toc-number">2.</span> <span class="toc-text">发行版选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">安装环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">安装过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">4.1.</span> <span class="toc-text">新建虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-number">4.2.</span> <span class="toc-text">开始安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">系统后期配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E9%A9%B1%E5%8A%A8"><span class="toc-number">5.1.</span> <span class="toc-text">安装必要驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85KDE%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="toc-number">5.2.</span> <span class="toc-text">安装KDE图形界面</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="将 Dolby Vision Profile 7 转换为 Profile 8"/></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"/></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络威胁数据联盟暑期班CTF WP"/></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="macOS11中安装pwntools with python2"/></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android逆向调试环境搭建"/></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2021/05/27/Ubuntu%E5%86%85%E6%A0%B8%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0-CVE-2021-3493/" title="Ubuntu内核提权漏洞复现(CVE-2021-3493)"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/c03a06a10d26f29f66fa8206e35fa952.png"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Ubuntu内核提权漏洞复现(CVE-2021-3493)</div></div></a></div><div class="next-post pull-right"><a href="/2021/04/10/CentOS8%E4%B8%8B%E5%BC%80%E5%90%AFL2TP%E5%90%8EFirewalld%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="CentOS8下开启L2TP后Firewalld失效的解决方法"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2021/04/10/CentOS8%E4%B8%8B%E5%BC%80%E5%90%AFL2TP%E5%90%8EFirewalld%E5%A4%B1%E6%95%88%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95/" title="CentOS8下开启L2TP后Firewalld失效的解决方法"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/32e9ecd65a181ff724199004638e215e.png"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-04-10</div><div class="title">CentOS8下开启L2TP后Firewalld失效的解决方法</div></div></a></div><div><a href="/2021/01/31/%E5%9C%A8M1-Mac%E4%B8%AD%E5%AE%89%E8%A3%85Kali-Linux/" title="在M1 Mac中安装Kali Linux"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/42767cecadbfbe023c6bb470cbedcedb.png"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2021-01-31</div><div class="title">在M1 Mac中安装Kali Linux</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E8%A1%8C%E7%89%88%E9%80%89%E6%8B%A9"><span class="toc-number">2.</span> <span class="toc-text">发行版选择</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E7%8E%AF%E5%A2%83"><span class="toc-number">3.</span> <span class="toc-text">安装环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><span class="toc-number">4.</span> <span class="toc-text">安装过程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">4.1.</span> <span class="toc-text">新建虚拟机</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E5%AE%89%E8%A3%85"><span class="toc-number">4.2.</span> <span class="toc-text">开始安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E5%90%8E%E6%9C%9F%E9%85%8D%E7%BD%AE"><span class="toc-number">5.</span> <span class="toc-text">系统后期配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E9%A9%B1%E5%8A%A8"><span class="toc-number">5.1.</span> <span class="toc-text">安装必要驱动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85KDE%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="toc-number">5.2.</span> <span class="toc-text">安装KDE图形界面</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><div style="background: https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png"></div></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><div style="background: https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png"></div></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
     const valine = new Valine(Object.assign({
       el: '#vcomment',
       appId: 'th87MO7LYAcAV1QbXw1vd6gJ-gzGzoHsz',
       appKey: 'PWMOPMXVzkqTWmayHO5etuIt',
-      placeholder: 'Please leave your footprints',
       avatar: 'monsterid',
-      meta: 'nick,mail'.split(','),
-      pageSize: '10',
-      lang: 'en',
-      recordIP: true,
       serverURLs: '',
-      emojiCDN: '',
       emojiMaps: "",
-      enableQQ: false,
       path: window.location.pathname,
-      requiredFields: ["nick"],
       visitor: false
     }, null))
   }
 
-  if (typeof Valine === 'function') initValine() 
-  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
-}
-
-if ('Valine' === 'Valine' || !false) {
-  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-  else setTimeout(loadValine, 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
   }
-}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,37 +1,22 @@
-<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>将 Dolby Vision Profile 7 转换为 Profile 8 | Loki's Blog</title><meta name="keywords" content="Dolby Vision,HEVC,HDR"><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="关于 Dolby VisionDolby Vision 是一种 HDR 标准，能提供比 HDR10 更高的动态范围，高达 12bit 的色彩，动态元数据等等。Dolby Vision 内部本身又分为许多标准，比如流媒体广泛使用的 Profile 5，蓝光原盘中的 Profile 7，流媒体或 Apple 设备拍摄的 Profile 8。 Profile 7Profile 7 是双层杜比视界，一般存">
-<meta property="og:type" content="article">
-<meta property="og:title" content="将 Dolby Vision Profile 7 转换为 Profile 8">
-<meta property="og:url" content="http://example.com/2023/02/16/%E5%B0%81%E8%A3%85DV/index.html">
-<meta property="og:site_name" content="Loki&#39;s Blog">
-<meta property="og:description" content="关于 Dolby VisionDolby Vision 是一种 HDR 标准，能提供比 HDR10 更高的动态范围，高达 12bit 的色彩，动态元数据等等。Dolby Vision 内部本身又分为许多标准，比如流媒体广泛使用的 Profile 5，蓝光原盘中的 Profile 7，流媒体或 Apple 设备拍摄的 Profile 8。 Profile 7Profile 7 是双层杜比视界，一般存">
-<meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg">
-<meta property="article:published_time" content="2023-02-16T10:19:55.000Z">
-<meta property="article:modified_time" content="2023-08-04T08:32:33.570Z">
-<meta property="article:author" content="Loki">
-<meta property="article:tag" content="Dolby Vision">
-<meta property="article:tag" content="HEVC">
-<meta property="article:tag" content="HDR">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2023/02/16/%E5%B0%81%E8%A3%85DV/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>将 Dolby Vision Profile 7 转换为 Profile 8 | Loki's Blog</title><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="关于 Dolby VisionDolby Vision 是一种 HDR 标准，能提供比 HDR10 更高的动态范围，高达 12bit 的色彩，动态元数据等等。Dolby Vision 内部本身又分为许多标准，比如流媒体广泛使用的 Profile 5，蓝光原盘中的 Profile 7，流媒体或 App"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2023/02/16/%E5%B0%81%E8%A3%85DV/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
   root: '/',
   algolia: undefined,
-  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
   translate: undefined,
   noticeOutdate: undefined,
   highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
   },
   relativeDate: {
     homepage: false,
     post: false
   },
   runtime: '',
-  date_suffix: {
-    just: 'Just',
+  dateSuffix: {
+    just: 'Just now',
     min: 'minutes ago',
     hour: 'hours ago',
     day: 'days ago',
@@ -40,20 +25,18 @@
   copyright: undefined,
   lightbox: 'fancybox',
   Snackbar: undefined,
-  source: {
-    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
-    justifiedGallery: {
-      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
-    },
-    fancybox: {
-      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
-      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
-    }
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
   },
   isPhotoFigcaption: false,
   islazyload: true,
-  isanchor: false
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
   title: '将 Dolby Vision Profile 7 转换为 Profile 8',
   isPost: true,
@@ -61,69 +44,77 @@
   isHighlightShrink: false,
   isToc: true,
   postUpdate: '2023-08-04 16:32:33'
-}</script><noscript><style type="text/css">
-  #nav {
-    opacity: 1
-  }
-  .justified-gallery img {
-    opacity: 1
-  }
-
-  #recent-posts time,
-  #post-meta time {
-    display: inline !important
-  }
-</style></noscript><script>(win=>{
-    win.saveToLocal = {
-      set: function setWithExpiry(key, value, ttl) {
-        if (ttl === 0) return
-        const now = new Date()
-        const expiryDay = ttl * 86400000
-        const item = {
-          value: value,
-          expiry: now.getTime() + expiryDay,
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
         }
-        localStorage.setItem(key, JSON.stringify(item))
-      },
-
-      get: function getWithExpiry(key) {
-        const itemStr = localStorage.getItem(key)
-
-        if (!itemStr) {
-          return undefined
-        }
-        const item = JSON.parse(itemStr)
-        const now = new Date()
-
-        if (now.getTime() > item.expiry) {
-          localStorage.removeItem(key)
-          return undefined
-        }
-        return item.value
       }
-    }
-  
-    win.getScript = url => new Promise((resolve, reject) => {
-      const script = document.createElement('script')
-      script.src = url
-      script.async = true
-      script.onerror = reject
-      script.onload = script.onreadystatechange = function() {
-        const loadState = this.readyState
-        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
-        script.onload = script.onreadystatechange = null
-        resolve()
-      }
-      document.head.appendChild(script)
-    })
-  
-      win.activateDarkMode = function () {
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
         document.documentElement.setAttribute('data-theme', 'dark')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
         }
       }
-      win.activateLightMode = function () {
+      win.activateLightMode = () => {
         document.documentElement.setAttribute('data-theme', 'light')
         if (document.querySelector('meta[name="theme-color"]') !== null) {
           document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
@@ -145,7 +136,7 @@
               const isNight = hour <= 6 || hour >= 18
               isNight ? activateDarkMode() : activateLightMode()
             }
-            window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
               if (saveToLocal.get('theme') === undefined) {
                 e.matches ? activateDarkMode() : activateLightMode()
               }
@@ -161,7 +152,14 @@
           document.documentElement.classList.remove('hide-aside')
         }
       }
-    })(window)</script><meta name="generator" content="Hexo 5.4.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">Loki's Blog</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">将 Dolby Vision Profile 7 转换为 Profile 8</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-08-04T08:32:33.570Z" title="Updated 2023-08-04 16:32:33">2023-08-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>10min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="将 Dolby Vision Profile 7 转换为 Profile 8"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="关于-Dolby-Vision"><a href="#关于-Dolby-Vision" class="headerlink" title="关于 Dolby Vision"></a>关于 Dolby Vision</h2><p>Dolby Vision 是一种 HDR 标准，能提供比 HDR10 更高的动态范围，高达 12bit 的色彩，动态元数据等等。Dolby Vision 内部本身又分为许多标准，比如流媒体广泛使用的 Profile 5，蓝光原盘中的 Profile 7，流媒体或 Apple 设备拍摄的 Profile 8。</p>
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Loki's Blog"><span class="site-name">Loki's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">将 Dolby Vision Profile 7 转换为 Profile 8</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-08-04T08:32:33.570Z" title="Updated 2023-08-04 16:32:33">2023-08-04</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Notes/">Notes</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">2.2k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>10mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="将 Dolby Vision Profile 7 转换为 Profile 8"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="关于-Dolby-Vision"><a href="#关于-Dolby-Vision" class="headerlink" title="关于 Dolby Vision"></a>关于 Dolby Vision</h2><p>Dolby Vision 是一种 HDR 标准，能提供比 HDR10 更高的动态范围，高达 12bit 的色彩，动态元数据等等。Dolby Vision 内部本身又分为许多标准，比如流媒体广泛使用的 Profile 5，蓝光原盘中的 Profile 7，流媒体或 Apple 设备拍摄的 Profile 8。</p>
 <h3 id="Profile-7"><a href="#Profile-7" class="headerlink" title="Profile 7"></a>Profile 7</h3><p>Profile 7 是双层杜比视界，一般存在于蓝光原盘中，解析 Profile 7 需要播放机的SoC中存在相关授权，直接劝退了 infuse 等一众移动端播放器，解析不了 Profile 7 则只能按 HDR10 的标准解析，效果会有折扣。</p>
 <p>Profile 7 中一般分为 BL，RPU，EL，</p>
 <p>BL ：基础层，一个基本的视频，一个基本的“原料”。通常是一个YUV420 10bit HDR10视频，普通的设备播放【Dolby Vision】视频无法激活【Dolby Vision】，原因就是播放器只能读取到这个BL层。这也是为什么【Dolby Vision】兼容HDR10的原因，即在普通播放机上播放杜比视界的视频时，会以兼容模式HDR10输出。</p>
@@ -169,10 +167,10 @@
 <p>EL：简单的理解这是一个扩展层。一个标准的杜比视界，会把YUV420 10bit 的BL层视频，合成YUV422 12bit 视频。这个EL层就是扩展数据，用于扩展BL的视频有效信息。 让最终成品有更多的色阶，更多的颜色，更大的对比度范围。</p>
 <p>所以称为双层杜比视界。</p>
 <p>我们可以使用 mediainfo 或 BDinfo 查看是否含有 DV Profile 7：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/67f61fd6c1271bb9faea8bf7e4ddb09f.png" alt="image-20230214195045543"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/67f61fd6c1271bb9faea8bf7e4ddb09f.png" alt="image-20230214195045543"></p>
 <p>如上图红色框内则是含有 RPU+EL 的额外视频轨道，播放时会解析这条轨道并叠加到上面的  BL层，一般称为双轨双层。</p>
 <p>比较新的原盘 REMUX 也会含有 DV Profile 7，我们用 mediainfo 查看：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/eb8a8fe7ecf3b852aa0484351f87e778.png" alt="image-20230216192931201"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/eb8a8fe7ecf3b852aa0484351f87e778.png" alt="image-20230216192931201"></p>
 <p>可以发现只有一条视频轨道，整合了 Profile 7 和 HDR 10 的信息，这种一般称为单轨双层。</p>
 <h3 id="Profile-5-和-Profile-8"><a href="#Profile-5-和-Profile-8" class="headerlink" title="Profile 5 和 Profile 8"></a>Profile 5 和 Profile 8</h3><p>Profile 5 和 Profile 8 都是单层杜比视界，<strong>就是 BL+RPU的组合，也称为Dolby Vision MEL - 迷你杜比视界层。</strong>这种杜比视界只有“指导”数据，大部分的内容是HDR的动态映射（tone mapping）的dynamic metadata。与原盘的双层杜比视界相比缺少了 12bit 的色彩数据，一般用于流媒体以及手机拍摄的杜比视界视频，虽然效果不如 Profile 7，但是却可以被 infuse 解析，效果也比一般的 HDR 10 要好。</p>
 <h2 id="将-Profile-7-转换为-Profile-8"><a href="#将-Profile-7-转换为-Profile-8" class="headerlink" title="将 Profile 7 转换为 Profile 8"></a>将 Profile 7 转换为 Profile 8</h2><p>为了能在便携设备观看杜比视界，转为 Profile 8 是首选，在不支持杜比视界的播放器上 Profile 5 会出现严重的偏色，而 Profile 8 则能以 HDR10 的格式播放。</p>
@@ -414,9 +412,9 @@
 
 <p>修复完成后 mkv 的标题应该是被去除了，此时可以对该 mkv 添加音轨以及字幕。</p>
 <p>最终我们可以得到一个 包含 DV Profile 8 的原盘 REMUX，用 mediafinfo 可以看到：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/fad83e2811dbd67798e53ad5e1912c26.png" alt="image-20230216210550821"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/fad83e2811dbd67798e53ad5e1912c26.png" alt="image-20230216210550821"></p>
 <p>在 infuse 中顺利点亮 DV：</p>
-<p><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/07/0015a04ce23554eb1f13be87a3d55546.jpeg" alt="IMG_DE0797DA0A3B-1"></p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/07/0015a04ce23554eb1f13be87a3d55546.jpeg" alt="IMG_DE0797DA0A3B-1"></p>
 <p>这里讨论的是制作包含杜比视界的原盘 REMUX，如果需要压制视频，猜测需要提取RPU.bin，压制完成后再进行合并。</p>
 <p>在 ChatGPT 的帮助下，我构建了一个将原盘 remux 自动化处理的 powershell 脚本：</p>
 <pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell"><span class="token keyword">param</span><span class="token punctuation">(</span>
@@ -432,37 +430,32 @@
     &amp; <span class="token string">"python-3.7.6.amd64\python.exe"</span> MKV_patcher8<span class="token punctuation">.</span>py <span class="token string">"a_____________________________________.mkv"</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Dolby-Vision/">Dolby Vision</a><a class="post-meta__tags" href="/tags/HEVC/">HEVC</a><a class="post-meta__tags" href="/tags/HDR/">HDR</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/"><img class="next-cover" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</div></div></a></div></nav><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="card-info-avatar is-center"><img class="avatar-img" src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">22</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-Dolby-Vision"><span class="toc-number">1.</span> <span class="toc-text">关于 Dolby Vision</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Profile-7"><span class="toc-number">1.1.</span> <span class="toc-text">Profile 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Profile-5-%E5%92%8C-Profile-8"><span class="toc-number">1.2.</span> <span class="toc-text">Profile 5 和 Profile 8</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86-Profile-7-%E8%BD%AC%E6%8D%A2%E4%B8%BA-Profile-8"><span class="toc-number">2.</span> <span class="toc-text">将 Profile 7 转换为 Profile 8</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="将 Dolby Vision Profile 7 转换为 Profile 8"/></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"/></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="网络威胁数据联盟暑期班CTF WP"/></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="macOS11中安装pwntools with python2"/></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><img src= "data:image/gif;base64,R0lGODdhAQABAPAAAMPDwwAAACwAAAAAAQABAAACAkQBADs=" data-lazy-src="https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Android逆向调试环境搭建"/></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div></div><hr/><div id="local-search-results"></div><span class="search-close-button"><i class="fas fa-times"></i></span></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script src="/js/search/local-search.js"></script><div class="js-pjax"><script>function loadValine () {
-  function initValine () {
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Dolby-Vision/">Dolby Vision</a><a class="post-meta__tags" href="/tags/HEVC/">HEVC</a><a class="post-meta__tags" href="/tags/HDR/">HDR</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><div class="cover" style="background: https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">13</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">3</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8E-Dolby-Vision"><span class="toc-number">1.</span> <span class="toc-text">关于 Dolby Vision</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Profile-7"><span class="toc-number">1.1.</span> <span class="toc-text">Profile 7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Profile-5-%E5%92%8C-Profile-8"><span class="toc-number">1.2.</span> <span class="toc-text">Profile 5 和 Profile 8</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%86-Profile-7-%E8%BD%AC%E6%8D%A2%E4%B8%BA-Profile-8"><span class="toc-number">2.</span> <span class="toc-text">将 Profile 7 转换为 Profile 8</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><div style="background: https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png"></div></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2"><div style="background: https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/img/default.jpg"></div></a><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建"><div style="background: https://cdn.starryloki.com/2023/11/f7711ea5f35f44f54713614cf41a02b4.png"></div></a><div class="content"><a class="title" href="/2021/06/09/Android%E9%80%86%E5%90%91%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" title="Android逆向调试环境搭建">Android逆向调试环境搭建</a><time datetime="2021-06-09T02:20:08.000Z" title="Created 2021-06-09 10:20:08">2021-06-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
     const valine = new Valine(Object.assign({
       el: '#vcomment',
       appId: 'th87MO7LYAcAV1QbXw1vd6gJ-gzGzoHsz',
       appKey: 'PWMOPMXVzkqTWmayHO5etuIt',
-      placeholder: 'Please leave your footprints',
       avatar: 'monsterid',
-      meta: 'nick,mail'.split(','),
-      pageSize: '10',
-      lang: 'en',
-      recordIP: true,
       serverURLs: '',
-      emojiCDN: '',
       emojiMaps: "",
-      enableQQ: false,
       path: window.location.pathname,
-      requiredFields: ["nick"],
       visitor: false
     }, null))
   }
 
-  if (typeof Valine === 'function') initValine() 
-  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
-}
-
-if ('Valine' === 'Valine' || !false) {
-  if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
-  else setTimeout(loadValine, 0)
-} else {
-  function loadOtherComment () {
-    loadValine()
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
   }
-}</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
