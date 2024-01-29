@@ -1,0 +1,235 @@
+<!DOCTYPE html><html lang="en-US" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>使用IP Route构建Wireguard代理链 | Loki's Blog</title><meta name="author" content="Loki"><meta name="copyright" content="Loki"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基本结构 在图示的环境中，路由器Router管理着10.12.0.1&amp;#x2F;16的子网，Local WireGuard Client作为WireGuard客户端，想要与Proxy Node 2建立隧道以及10.0.0.0&amp;#x2F;24的子网，并作为Router的上游。然而由于一些ISP的原因，"><link rel="shortcut icon" href="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png"><link rel="canonical" href="http://example.com/2023/11/09/%E4%BD%BF%E7%94%A8IP%20Route%E6%9E%84%E5%BB%BAWireguard%E4%BB%A3%E7%90%86%E9%93%BE/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"prismjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: true
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '使用IP Route构建Wireguard代理链',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-01-29 10:36:41'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+          const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+          const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+
+          if (t === undefined) {
+            if (isLightMode) activateLightMode()
+            else if (isDarkMode) activateDarkMode()
+            else if (isNotSpecified || hasNoSupport) {
+              const now = new Date()
+              const hour = now.getHours()
+              const isNight = hour <= 6 || hour >= 18
+              isNight ? activateDarkMode() : activateLightMode()
+            }
+            window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+              if (saveToLocal.get('theme') === undefined) {
+                e.matches ? activateDarkMode() : activateLightMode()
+              }
+            })
+          } else if (t === 'light') activateLightMode()
+          else activateDarkMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.starryloki.com/2024/01/a45e780e14e4782ff931cc3a5073b3d5.png')"><nav id="nav"><span id="blog-info"><a href="/" title="Loki's Blog"><span class="site-name">Loki's Blog</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">使用IP Route构建Wireguard代理链</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-09T09:28:47.000Z" title="Created 2023-11-09 17:28:47">2023-11-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-01-29T02:36:41.335Z" title="Updated 2024-01-29 10:36:41">2024-01-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BD%91%E7%BB%9C/">网络</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word Count:</span><span class="word-count">922</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading Time:</span><span>4mins</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="使用IP Route构建Wireguard代理链"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/12/7026fe5b379ea7fe971846dd30c68514.png"></p>
+<p>在图示的环境中，路由器Router管理着10.12.0.1&#x2F;16的子网，Local WireGuard Client作为WireGuard客户端，想要与Proxy Node 2建立隧道以及10.0.0.0&#x2F;24的子网，并作为Router的上游。然而由于一些ISP的原因，Node 2无法与Client建立牢固的UDP连接，这时候需要引入Node 1中转流量。理想状态下，配置完成后在PC进行traceroute，应该会得到以下输出：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">traceroute 1.1.1.1<br>1 10.12.0.1<br>2 10.12.0.4<br>3 10.0.0.1<br>4 10.0.0.3<br>...Node2 ISP<br>6 1.1.1.1<br></code></pre></td></tr></table></figure>
+
+<p>现在我们从Node 1开始逐级配置。</p>
+<h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3 id="配置Node-1"><a href="#配置Node-1" class="headerlink" title="配置Node 1"></a>配置Node 1</h3><p>本文假设已经配置了WireGuard子网中各Peer节点的基本配置，使各个Peer能相互连接。</p>
+<p>首先要开启IPv4转发：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sysctl net.ipv4.ip_forward=1<br></code></pre></td></tr></table></figure>
+
+<p>然后在<code>/etc/iproute2/rt_tables</code>中插入<code>1 mid</code>来创建名为mid的路由表：</p>
+<p>插入完成后效果如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /etc/iproute2/rt_tables<br><span class="hljs-comment">#</span><br><span class="hljs-comment"># reserved values</span><br><span class="hljs-comment">#</span><br>255	<span class="hljs-built_in">local</span><br>254	main<br>253	default<br>0	unspec<br>1 mid<br><span class="hljs-comment">#</span><br><span class="hljs-comment"># local</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#1	inr.ruhep</span><br></code></pre></td></tr></table></figure>
+
+<p>再给mid路由表添加下一跳并启用路由表：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip route add 0.0.0.0/0 via 10.0.0.3 table mid<br></code></pre></td></tr></table></figure>
+
+<p>再配置IP Rule让指定源IP通过mid路由表，这里我们需要配置10.12.0.0&#x2F;16子网：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip rule add from 10.12.0.0/16 lookup mid<br></code></pre></td></tr></table></figure>
+
+<p>此时还需要配置Node 2对应Peer的<code>allowed-ips</code>:</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">wg <span class="hljs-built_in">set</span> wg0 peer &#123;Node2_Public_Key&#125; allowed-ips 0.0.0.0/0<br></code></pre></td></tr></table></figure>
+
+<p>此时来自10.12.0.0&#x2F;16的流量都会发往Node 2。</p>
+<h3 id="配置Node-2"><a href="#配置Node-2" class="headerlink" title="配置Node 2"></a>配置Node 2</h3><p>首先要开启IPv4转发：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sysctl net.ipv4.ip_forward=1<br></code></pre></td></tr></table></figure>
+
+<p>在nftables配置NAT规则：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /etc/nftables<br><span class="hljs-comment">#!/usr/sbin/nft -f</span><br><br>flush ruleset<br><br>table inet filter &#123;<br>        chain input &#123;<br>                <span class="hljs-built_in">type</span> filter hook forward priority 0; policy accept;<br>        &#125;<br>        chain forward &#123;<br>                <span class="hljs-built_in">type</span> filter hook forward priority 0;<br>                iifname <span class="hljs-string">&quot;wg0&quot;</span> accept<br>        &#125;<br>        chain output &#123;<br>                <span class="hljs-built_in">type</span> filter hook output priority 0;<br>        &#125;<br>&#125;<br>table inet nat &#123;<br>        chain postrouting &#123;<br>                <span class="hljs-built_in">type</span> nat hook postrouting priority 0; policy accept;<br>                oifname <span class="hljs-string">&quot;eth0&quot;</span> ip saddr 10.12.0.0/16 masquerade<br>								oifname <span class="hljs-string">&quot;eth0&quot;</span> ip saddr 10.0.0.0/24 masquerade<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>同时还需要在WireGuard配置文件中配置对端Peer的AllowedIPs：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">[Peer]<br>PublicKey = &#123;Public_Key&#125;<br>AllowedIPs = 10.0.0.1/24, 10.12.0.0/16<br></code></pre></td></tr></table></figure>
+
+<p>启动WireGuard并应用nftables规则：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">wg-quick up wg0 &amp;&amp; systemctl restart nftables<br></code></pre></td></tr></table></figure>
+
+
+
+<p>此时代理链配置完成，进行traceroute测试：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">traceroute 1.1.1.1<br>traceroute to 1.1.1.1 (1.1.1.1), 64 hops max, 52 byte packets<br> 1  10.12.0.1 (10.12.0.1)<br> 2  10.12.0.4 (10.12.0.4)<br> 3  10.0.0.1 (10.0.0.1)<br> 4  10.0.0.3 (10.0.0.3) <br> ...&#123;Node2 ISPs&#125;<br> 8  one.one.one.one (1.1.1.1)<br></code></pre></td></tr></table></figure>
+
+<h2 id="其他场景"><a href="#其他场景" class="headerlink" title="其他场景"></a>其他场景</h2><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/12/2a35f45d55fb5f4e1cad9052d4dee8ff.png" alt="image-20231208171703625"></p>
+<p>有可能会出现一些特殊场景，比如在Node 1另外接入一台Node 3，并根据源地址进行分流，一部分地址走Node 2，一部分走Node 3。</p>
+<p>此时Client与Node 1、Node 2建立了10.0.0.0&#x2F;24的子网，Node 3想要接入Node 1并作为分流节点，就不能加入10.0.0.0&#x2F;24的子网。假设Node 1连接10.0.0.0&#x2F;24子网所用的网卡是wg0，需要在Node 1 上建立新的WireGuard配置文件命名为wg1，子网可以设成<code>10.0.1.0/24</code>，之后就可以重复上面的步骤：添加新的路由表，为路由表添加下一跳，设置IP Rule等。此时下一跳为Node 3。</p>
+<p>不能让Node 3加入10.0.0.0&#x2F;24再指定下一跳的原因是：在一个Wireguard配置文件里（如wg0），即使有多个Peer，Allowed-IPs为0.0.0.0&#x2F;0的Peer有且只能有一个，下一跳指定为wg0的IP后，Wireguard会把流量重定向到Allowed-IPs为0.0.0.0&#x2F;0的Peer。</p>
+<p>所以上面设置IP route 的步骤也可以直接指定网卡，效果是一样的：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip route add 0.0.0.0/0 dev wg0 table mid<br></code></pre></td></tr></table></figure></article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%B7%AF%E7%94%B1/">路由</a><a class="post-meta__tags" href="/tags/Wireguard/">Wireguard</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.starryloki.com/2024/01/a45e780e14e4782ff931cc3a5073b3d5.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">将 Dolby Vision Profile 7 转换为 Profile 8</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/ec3934bcc56f1aa86b5c6dc1664556ae.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Loki</div><div class="author-info__description">Meet me in the afterglow.</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">24</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/starryloki" target="_blank" title="Github"><i class="fab fa-github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">If you can not load image correctly, please try to add 'cdn.jsdelivr.net' to proxy list. I STAND WITH UKRAINE🇺🇦.</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">基本结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B5%81%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">配置流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AENode-1"><span class="toc-number">2.1.</span> <span class="toc-text">配置Node 1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AENode-2"><span class="toc-number">2.2.</span> <span class="toc-text">配置Node 2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E5%9C%BA%E6%99%AF"><span class="toc-number">3.</span> <span class="toc-text">其他场景</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2023/11/09/%E4%BD%BF%E7%94%A8IP%20Route%E6%9E%84%E5%BB%BAWireguard%E4%BB%A3%E7%90%86%E9%93%BE/" title="使用IP Route构建Wireguard代理链"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2024/01/a45e780e14e4782ff931cc3a5073b3d5.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="使用IP Route构建Wireguard代理链"/></a><div class="content"><a class="title" href="/2023/11/09/%E4%BD%BF%E7%94%A8IP%20Route%E6%9E%84%E5%BB%BAWireguard%E4%BB%A3%E7%90%86%E9%93%BE/" title="使用IP Route构建Wireguard代理链">使用IP Route构建Wireguard代理链</a><time datetime="2023-11-09T09:28:47.000Z" title="Created 2023-11-09 17:28:47">2023-11-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/02/16/%E5%B0%81%E8%A3%85DV/" title="将 Dolby Vision Profile 7 转换为 Profile 8">将 Dolby Vision Profile 7 转换为 Profile 8</a><time datetime="2023-02-16T10:19:55.000Z" title="Created 2023-02-16 18:19:55">2023-02-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://cdn.starryloki.com/2023/11/e85e0e31fc55e7a557735a7c875b41fe.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)"/></a><div class="content"><a class="title" href="/2022/12/03/%E4%B8%BAESXi%E9%9B%86%E6%88%90SLIC%E4%BB%A5%E5%8F%8A%E5%85%B6%E4%BB%96%E8%87%AA%E5%AE%9A%E4%B9%89(6.7-8.0)/" title="为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)">为 ESXi 集成 SLIC 以及其他自定义 (6.7-8.0)</a><time datetime="2022-12-03T04:08:49.000Z" title="Created 2022-12-03 12:08:49">2022-12-03</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/09/07/%E7%BD%91%E7%BB%9C%E5%A8%81%E8%83%81%E6%95%B0%E6%8D%AE%E8%81%94%E7%9B%9F%E6%9A%91%E6%9C%9F%E7%8F%ADCTF%20WP/" title="网络威胁数据联盟暑期班CTF WP">网络威胁数据联盟暑期班CTF WP</a><time datetime="2021-09-07T03:08:49.000Z" title="Created 2021-09-07 11:08:49">2021-09-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2021/08/04/macOS11%E4%B8%AD%E5%AE%89%E8%A3%85pwntools%20with%20python2/" title="macOS11中安装pwntools with python2">macOS11中安装pwntools with python2</a><time datetime="2021-08-03T19:25:32.000Z" title="Created 2021-08-04 03:25:32">2021-08-04</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Loki</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'th87MO7LYAcAV1QbXw1vd6gJ-gzGzoHsz',
+      appKey: 'PWMOPMXVzkqTWmayHO5etuIt',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script defer="defer" id="ribbon" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-ribbon.min.js" size="150" alpha="0.6" zIndex="-1" mobile="false" data-click="false"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

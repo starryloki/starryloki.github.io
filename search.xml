@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>使用IP Route构建Wireguard代理链</title>
+      <link href="/2023/11/09/%E4%BD%BF%E7%94%A8IP%20Route%E6%9E%84%E5%BB%BAWireguard%E4%BB%A3%E7%90%86%E9%93%BE/"/>
+      <url>/2023/11/09/%E4%BD%BF%E7%94%A8IP%20Route%E6%9E%84%E5%BB%BAWireguard%E4%BB%A3%E7%90%86%E9%93%BE/</url>
+      
+        <content type="html"><![CDATA[<h2 id="基本结构"><a href="#基本结构" class="headerlink" title="基本结构"></a>基本结构</h2><p><img src="https://cdn.starryloki.com/2023/12/7026fe5b379ea7fe971846dd30c68514.png"></p><p>在图示的环境中，路由器Router管理着10.12.0.1&#x2F;16的子网，Local WireGuard Client作为WireGuard客户端，想要与Proxy Node 2建立隧道以及10.0.0.0&#x2F;24的子网，并作为Router的上游。然而由于一些ISP的原因，Node 2无法与Client建立牢固的UDP连接，这时候需要引入Node 1中转流量。理想状态下，配置完成后在PC进行traceroute，应该会得到以下输出：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">traceroute 1.1.1.1<br>1 10.12.0.1<br>2 10.12.0.4<br>3 10.0.0.1<br>4 10.0.0.3<br>...Node2 ISP<br>6 1.1.1.1<br></code></pre></td></tr></table></figure><p>现在我们从Node 1开始逐级配置。</p><h2 id="配置流程"><a href="#配置流程" class="headerlink" title="配置流程"></a>配置流程</h2><h3 id="配置Node-1"><a href="#配置Node-1" class="headerlink" title="配置Node 1"></a>配置Node 1</h3><p>本文假设已经配置了WireGuard子网中各Peer节点的基本配置，使各个Peer能相互连接。</p><p>首先要开启IPv4转发：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sysctl net.ipv4.ip_forward=1<br></code></pre></td></tr></table></figure><p>然后在<code>/etc/iproute2/rt_tables</code>中插入<code>1 mid</code>来创建名为mid的路由表：</p><p>插入完成后效果如下：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /etc/iproute2/rt_tables<br><span class="hljs-comment">#</span><br><span class="hljs-comment"># reserved values</span><br><span class="hljs-comment">#</span><br>255<span class="hljs-built_in">local</span><br>254main<br>253default<br>0unspec<br>1 mid<br><span class="hljs-comment">#</span><br><span class="hljs-comment"># local</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment">#1inr.ruhep</span><br></code></pre></td></tr></table></figure><p>再给mid路由表添加下一跳并启用路由表：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip route add 0.0.0.0/0 via 10.0.0.3 table mid<br></code></pre></td></tr></table></figure><p>再配置IP Rule让指定源IP通过mid路由表，这里我们需要配置10.12.0.0&#x2F;16子网：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip rule add from 10.12.0.0/16 lookup mid<br></code></pre></td></tr></table></figure><p>此时还需要配置Node 2对应Peer的<code>allowed-ips</code>:</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">wg <span class="hljs-built_in">set</span> wg0 peer &#123;Node2_Public_Key&#125; allowed-ips 0.0.0.0/0<br></code></pre></td></tr></table></figure><p>此时来自10.12.0.0&#x2F;16的流量都会发往Node 2。</p><h3 id="配置Node-2"><a href="#配置Node-2" class="headerlink" title="配置Node 2"></a>配置Node 2</h3><p>首先要开启IPv4转发：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">sysctl net.ipv4.ip_forward=1<br></code></pre></td></tr></table></figure><p>在nftables配置NAT规则：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /etc/nftables<br><span class="hljs-comment">#!/usr/sbin/nft -f</span><br><br>flush ruleset<br><br>table inet filter &#123;<br>        chain input &#123;<br>                <span class="hljs-built_in">type</span> filter hook forward priority 0; policy accept;<br>        &#125;<br>        chain forward &#123;<br>                <span class="hljs-built_in">type</span> filter hook forward priority 0;<br>                iifname <span class="hljs-string">&quot;wg0&quot;</span> accept<br>        &#125;<br>        chain output &#123;<br>                <span class="hljs-built_in">type</span> filter hook output priority 0;<br>        &#125;<br>&#125;<br>table inet nat &#123;<br>        chain postrouting &#123;<br>                <span class="hljs-built_in">type</span> nat hook postrouting priority 0; policy accept;<br>                oifname <span class="hljs-string">&quot;eth0&quot;</span> ip saddr 10.12.0.0/16 masquerade<br>oifname <span class="hljs-string">&quot;eth0&quot;</span> ip saddr 10.0.0.0/24 masquerade<br>&#125;<br>&#125;<br></code></pre></td></tr></table></figure><p>同时还需要在WireGuard配置文件中配置对端Peer的AllowedIPs：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">[Peer]<br>PublicKey = &#123;Public_Key&#125;<br>AllowedIPs = 10.0.0.1/24, 10.12.0.0/16<br></code></pre></td></tr></table></figure><p>启动WireGuard并应用nftables规则：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">wg-quick up wg0 &amp;&amp; systemctl restart nftables<br></code></pre></td></tr></table></figure><p>此时代理链配置完成，进行traceroute测试：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">traceroute 1.1.1.1<br>traceroute to 1.1.1.1 (1.1.1.1), 64 hops max, 52 byte packets<br> 1  10.12.0.1 (10.12.0.1)<br> 2  10.12.0.4 (10.12.0.4)<br> 3  10.0.0.1 (10.0.0.1)<br> 4  10.0.0.3 (10.0.0.3) <br> ...&#123;Node2 ISPs&#125;<br> 8  one.one.one.one (1.1.1.1)<br></code></pre></td></tr></table></figure><h2 id="其他场景"><a href="#其他场景" class="headerlink" title="其他场景"></a>其他场景</h2><p><img src="https://cdn.starryloki.com/2023/12/2a35f45d55fb5f4e1cad9052d4dee8ff.png" alt="image-20231208171703625"></p><p>有可能会出现一些特殊场景，比如在Node 1另外接入一台Node 3，并根据源地址进行分流，一部分地址走Node 2，一部分走Node 3。</p><p>此时Client与Node 1、Node 2建立了10.0.0.0&#x2F;24的子网，Node 3想要接入Node 1并作为分流节点，就不能加入10.0.0.0&#x2F;24的子网。假设Node 1连接10.0.0.0&#x2F;24子网所用的网卡是wg0，需要在Node 1 上建立新的WireGuard配置文件命名为wg1，子网可以设成<code>10.0.1.0/24</code>，之后就可以重复上面的步骤：添加新的路由表，为路由表添加下一跳，设置IP Rule等。此时下一跳为Node 3。</p><p>不能让Node 3加入10.0.0.0&#x2F;24再指定下一跳的原因是：在一个Wireguard配置文件里（如wg0），即使有多个Peer，Allowed-IPs为0.0.0.0&#x2F;0的Peer有且只能有一个，下一跳指定为wg0的IP后，Wireguard会把流量重定向到Allowed-IPs为0.0.0.0&#x2F;0的Peer。</p><p>所以上面设置IP route 的步骤也可以直接指定网卡，效果是一样的：</p><figure class="highlight bash"><table><tr><td class="code"><pre><code class="hljs bash">ip route add 0.0.0.0/0 dev wg0 table mid<br></code></pre></td></tr></table></figure>]]></content>
+      
+      
+      <categories>
+          
+          <category> 网络 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 路由 </tag>
+            
+            <tag> Wireguard </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>将 Dolby Vision Profile 7 转换为 Profile 8</title>
       <link href="/2023/02/16/%E5%B0%81%E8%A3%85DV/"/>
       <url>/2023/02/16/%E5%B0%81%E8%A3%85DV/</url>
